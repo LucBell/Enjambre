@@ -10,4 +10,4 @@ Click a box and hit the number on your keybaord to pencil in a number. To confir
 
 You can also run Sudoku-Solver in Gitpod, a free online dev environment for GitHub:
 
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/anixane/SudokuVizualizationBackracking)
+[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/anixane/SudokuVizualizationBacktracking/blob/master/GUI.py)
