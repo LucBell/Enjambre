@@ -11,7 +11,8 @@ import time
 
 pygame.font.init()
 
-
+def dibuja_cuadrados(win):
+    pygame.draw.rect(win, (0, 255, 0), (50, 50, 100, 100), 3)
 
 def main():
     # Establecer el tamaño de la ventana y lo mete en una variable
@@ -26,7 +27,7 @@ def main():
     # Ejecución de programa
     # Quitar las señales a las partes que quiero ejecutar
 
-    
+    pygame.draw.rect(win, (233, 252, 193), (50, 50, 100, 100), 0)
     
 
     # Ejemplo de como mantener un programa corriendo hasta que cambias una variable.
