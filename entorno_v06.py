@@ -23,16 +23,25 @@ entorno = []
 dispX = 1600
 dispY = 1000
 
+# Tamaño Bordes
+
+bordX = 20
+bordY = 20
+
 # Longitud de la lista
 
-print("Longitud Lista: ",len(entorno))
+# print("Longitud Lista: ",len(entorno))
 
 # Pedir Tamaño del mapa y % de bordes
 
-tamX = int(input("Tamaño Horizontal 156? "))
-tamY = int(input("Tamaño Vertical 96? "))
-bordes = int(input("Porcentaje de bordes (1-100) 25?"))
-                   
+# tamX = int(input("Tamaño Horizontal 156? "))
+# tamY = int(input("Tamaño Vertical 96? "))
+# bordes = int(input("Porcentaje de bordes (1-100) 25?"))
+
+tamX = 30
+tamY = 20
+bordes = 25
+
 ##print(tamX)
 ##print(tamY)
 ##print(type(tamX))
@@ -76,7 +85,7 @@ def carga_del_entorno():
             # Creación de las características de la casilla
             entorno += [[coordX,coordY, bordIz, bordAr, bordDe, bordAb]]
         
-# print("Longitud Lista: ",len(entorno))
+    print("Longitud Lista: ",len(entorno))
 
 # print(entorno)
 
@@ -315,6 +324,52 @@ def pintarR02a(origenX,origenY,casillaCheck,win):
     if casillaCheck[5]==1:
         pygame.draw.line(win, (0, 0, 0), (posX+tc, posY), (posX, posY), 3)
 
+def hormiguero(win):
+    # Selecciono origen hormiguero aleatorio
+    horm = random.randint(1,len(entorno))
+    print ("Hormiguero en: ",horm)
+    print (entorno[horm])
+    casilla_horm = entorno[horm]
+    ch_X = casilla_horm[0]
+    ch_Y = casilla_horm[1]
+
+    # El tamaño del cuadrado lo debería hacer con una variable global o no local.
+
+    tcX = (dispX-40)/tamX
+    tcY = (dispY-40)/tamY
+    tc = min (tcX, tcY)
+
+    pygame.draw.rect(win, (201, 135, 58), (ch_X*tc+bordX,ch_Y*tc+bordY, tc, tc), 0)
+
+    print ("Coord horm",ch_X, ch_Y, ch_X*tc, ch_Y*tc )
+
+def comida(win):
+
+    # Selecciono destino comida aleatorio
+    comi = random.randint(1,len(entorno))
+
+    # print ("Comida en: ",comi)
+    # print (entorno[comi])
+
+    # Saco coordenadas de la casilla seleccionada
+
+    casilla_comi = entorno[comi]
+    cc_X = casilla_comi[0]
+    cc_Y = casilla_comi[1]
+
+    # El tamaño del cuadrado lo debería hacer con una variable global o no local.
+
+    tcX = (dispX-40)/tamX
+    tcY = (dispY-40)/tamY
+    tc = min (tcX, tcY)
+
+    # Dibujo rectágulo en la casilla seleccionada
+
+    pygame.draw.rect(win, (41, 158, 41), (cc_X*tc+bordX,cc_Y*tc+bordY, tc, tc), 0)
+
+    # print ("Coord comi",cc_X, cc_Y, cc_X*tc, cc_Y*tc )
+
+
 
 def main():
     # Establecer el tamaño de la ventana y lo mete en una variable
@@ -341,6 +396,9 @@ def main():
 
     eliminadorParejasVerticales()
 
+    hormiguero(win)
+    comida(win)
+
     print("Terminé!")
 
     # Ejemplo de como mantener un programa corriendo hasta que cambias una variable.
@@ -348,7 +406,7 @@ def main():
     # Defines la variable
     run = True
 
-    pintarR02(20,20,win)
+    pintarR02(bordX,bordY,win)
 
     # Mientras no la cambies a False, sigue corriendo en loop
     while run:
