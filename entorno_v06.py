@@ -369,6 +369,36 @@ def comida(win):
 
     # print ("Coord comi",cc_X, cc_Y, cc_X*tc, cc_Y*tc )
 
+def hormiga1():
+    # Hormiga que pasea por el hormiguero y que cuando encuentra la comida,
+    # vuelve marcando las casillas como "comida encontrada"
+    # también tiene que levantar muros si se encuentra casillas bloqueadas
+
+    # defino variable con el histórico del paseo
+    paseo_hormiga = []
+
+    # Coloco la hormiga en el hormiguero
+
+    pos_horm = ()
+
+
+    # Creo un loop hasta que encuentre la comida
+
+    paseo_activo = True
+
+    while paseo_activo:
+        # Decido hacia donde me muevo
+        # Aquí habrá que poner probabilidades según las indicaciones
+        # de las casillas adyacentes
+
+
+        # Luego compruebo si estoy en la comida para pararlo
+
+
+
+
+
+
 
 
 def main():
