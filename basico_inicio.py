@@ -27,8 +27,17 @@ def main():
     # Ejecución de programa
     # Quitar las señales a las partes que quiero ejecutar
 
+    # Cuadrado verde claro
     pygame.draw.rect(win, (233, 252, 193), (50, 50, 100, 100), 0)
-    
+
+    # Cuadrado rojo claro
+    pygame.draw.rect(win, (238, 36, 48), (50, 150, 100, 100), 0)
+
+    # Cuadrado verde oscuro
+    pygame.draw.rect(win, (41, 158, 41), (50, 250, 100, 100), 0)
+
+    # Cuadrado marron
+    pygame.draw.rect(win, (201, 135, 58), (50, 350, 100, 100), 0)
 
     # Ejemplo de como mantener un programa corriendo hasta que cambias una variable.
 

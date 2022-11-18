@@ -11,10 +11,17 @@ import turtle
 
 pygame.font.init()
 
+# Declaraciones variables principales
+
 # Variable Entorno es una lista
 
 entorno = []
 # print(type(entorno))
+
+# Tamaño Display
+
+dispX = 1600
+dispY = 1000
 
 # Longitud de la lista
 
@@ -22,9 +29,9 @@ print("Longitud Lista: ",len(entorno))
 
 # Pedir Tamaño del mapa y % de bordes
 
-tamX = int(input("Tamaño Horizontal? "))
-tamY = int(input("Tamaño Vertical? "))
-bordes = int(input("Porcentaje de bordes (1-100)?"))
+tamX = int(input("Tamaño Horizontal 156? "))
+tamY = int(input("Tamaño Vertical 96? "))
+bordes = int(input("Porcentaje de bordes (1-100) 25?"))
                    
 ##print(tamX)
 ##print(tamY)
@@ -285,29 +292,33 @@ def pintarR02(origenX,origenY,win):
 def pintarR02a(origenX,origenY,casillaCheck,win):
 
     # Defino el tamaño de las casillas y el origen de cada una
+    # 10 para tamaño pequeño
 
-    tc = 10
+    tcX = (dispX-40)/tamX
+    tcY = (dispY-40)/tamY
+    tc = min (tcX, tcY)
+
     posX = casillaCheck[0]*tc+origenX
     posY = casillaCheck[1]*tc+origenY
 
     # Pintar lados Casilla
     
     if casillaCheck[2]==1:
-        pygame.draw.line(win, (255, 0, 0), (posX, posY), (posX, posY+tc), 3)
+        pygame.draw.line(win, (0, 0, 0), (posX, posY), (posX, posY+tc), 3)
 
     if casillaCheck[3]==1:
-        pygame.draw.line(win, (255, 0, 0), (posX, posY+tc), (posX+tc, posY+tc), 3)
+        pygame.draw.line(win, (0, 0, 0), (posX, posY+tc), (posX+tc, posY+tc), 3)
 
     if casillaCheck[4]==1:
-        pygame.draw.line(win, (255, 0, 0), (posX+tc, posY+tc), (posX+tc, posY), 3)
+        pygame.draw.line(win, (0, 0, 0), (posX+tc, posY+tc), (posX+tc, posY), 3)
 
     if casillaCheck[5]==1:
-        pygame.draw.line(win, (255, 0, 0), (posX+tc, posY), (posX, posY), 3)
+        pygame.draw.line(win, (0, 0, 0), (posX+tc, posY), (posX, posY), 3)
 
 
 def main():
     # Establecer el tamaño de la ventana y lo mete en una variable
-    win = pygame.display.set_mode((1600,1000))
+    win = pygame.display.set_mode((dispX,dispY))
 
     # Establecer el título de la ventana
     pygame.display.set_caption("Ventana de Test1")
@@ -337,7 +348,7 @@ def main():
     # Defines la variable
     run = True
 
-    pintarR02(50,50,win)
+    pintarR02(20,20,win)
 
     # Mientras no la cambies a False, sigue corriendo en loop
     while run:
