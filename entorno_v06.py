@@ -418,7 +418,21 @@ def paseo_hormiga1(horm,comi):
             # recorrido_hormiga += pos_horm
             casilla = entorno[pos_horm]
             print ("Me muevo a: ", pos_horm, casilla)
-            recorrido_hormiga.append(pos_horm)
+            # print ("He recorrido: ", recorrido_hormiga)
+            
+            # Aquí voy a añadir la casilla al recorrido
+            # o si he hecho un bucle, lo voy a borrar
+            if pos_horm in recorrido_hormiga:
+                inicio_borrado = recorrido_hormiga.index(pos_horm)
+                fin_borrado = len(recorrido_hormiga)
+                del recorrido_hormiga[inicio_borrado+1:fin_borrado]
+            
+            # Si no ha encontrado el mismo, lo añado al recorrido
+            else:
+                recorrido_hormiga.append(pos_horm)
+            
+            print ("He recorrido: ", recorrido_hormiga)
+
         else:
             # print("No me muevo y lo intento de nuevo")
             pass
