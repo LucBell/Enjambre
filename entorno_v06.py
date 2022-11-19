@@ -40,7 +40,7 @@ bordY = 20
 
 tamX = 10
 tamY = 10
-bordes = 15
+bordes = 20
 
 ##print(tamX)
 ##print(tamY)
@@ -83,6 +83,12 @@ def carga_del_entorno():
                 bordAr =1
             
             # Creación de las características de la casilla
+            # Tengo que cambiar el nombre de los bordes, porque al pasar
+            # a Gitpod han cambiado. Ahora tenemos:
+            # 1. bordIz (este no ha cambiado)
+            # 2. bordAb (Cambio!)
+            # 3. bordDe (este no ha cambiado)
+            # 4. bordAr (Cambio!)
             entorno += [[coordX,coordY, bordIz, bordAr, bordDe, bordAb]]
         
     print("Longitud Lista: ",len(entorno))
@@ -439,6 +445,7 @@ def paseo_hormiga1(horm,comi):
 
         if pos_horm== comi:
             print("Encontré la comida!! En el intento: ", stamina)
+            print("He necesitado los siguientes pasos: ", len(recorrido_hormiga))
             print(recorrido_hormiga)
             break
 
