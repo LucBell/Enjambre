@@ -38,9 +38,9 @@ bordY = 20
 # tamY = int(input("Tamaño Vertical 96? "))
 # bordes = int(input("Porcentaje de bordes (1-100) 25?"))
 
-tamX = 30
-tamY = 20
-bordes = 25
+tamX = 3
+tamY = 3
+bordes = 15
 
 ##print(tamX)
 ##print(tamY)
@@ -326,7 +326,7 @@ def pintarR02a(origenX,origenY,casillaCheck,win):
 
 def hormiguero(win):
     # Selecciono origen hormiguero aleatorio
-    horm = random.randint(1,len(entorno))
+    horm = random.randint(0,len(entorno)-1)
     print ("Hormiguero en: ",horm)
     print (entorno[horm])
     casilla_horm = entorno[horm]
@@ -343,10 +343,14 @@ def hormiguero(win):
 
     print ("Coord horm",ch_X, ch_Y, ch_X*tc, ch_Y*tc )
 
+    return horm
+
 def comida(win):
 
     # Selecciono destino comida aleatorio
-    comi = random.randint(1,len(entorno))
+    # Pendientes: Si sale el mismo sitio que el hormiguero, tendría que buscar otro sitio.
+    
+    comi = random.randint(0,len(entorno)-1)
 
     # print ("Comida en: ",comi)
     # print (entorno[comi])
@@ -369,28 +373,62 @@ def comida(win):
 
     # print ("Coord comi",cc_X, cc_Y, cc_X*tc, cc_Y*tc )
 
-def hormiga1():
+    return comi
+
+
+def paseo_hormiga1(horm,comi):
     # Hormiga que pasea por el hormiguero y que cuando encuentra la comida,
     # vuelve marcando las casillas como "comida encontrada"
     # también tiene que levantar muros si se encuentra casillas bloqueadas
 
     # defino variable con el histórico del paseo
-    paseo_hormiga = []
+    recorrido_hormiga = []
 
     # Coloco la hormiga en el hormiguero
 
-    pos_horm = ()
+    pos_horm = (horm)
+    casilla = entorno[pos_horm]
 
+    print("Posición inicial: ",horm, casilla)
+    print("Objetivo: ",comi, entorno[comi])
+
+    # recorrido_hormiga += pos_horm
 
     # Creo un loop hasta que encuentre la comida
 
-    paseo_activo = True
+    aguante_hormiga = 100
 
-    while paseo_activo:
+    for stamina in range(1,aguante_hormiga+1):
         # Decido hacia donde me muevo
         # Aquí habrá que poner probabilidades según las indicaciones
         # de las casillas adyacentes
+        # print ("Intento número: ", stamina)
+        dir_objetivo = random.randint(1, 4)
+        # print ("Dirección: ", dir_objetivo)
+        # Compruebo si hay barrera
 
+        casilla = entorno[pos_horm]
+
+        if casilla[dir_objetivo+1] == 0:
+            direcciones = [-tamY,1,tamY,-1]
+            # print("Sumar para mover?: ", direcciones[dir_objetivo-1])
+            pos_horm += direcciones[dir_objetivo-1]
+            # recorrido_hormiga += pos_horm
+            casilla = entorno[pos_horm]
+            print ("Me muevo a: ", pos_horm, casilla)
+        else:
+            # print("No me muevo y lo intento de nuevo")
+            pass
+
+        if pos_horm== comi:
+            print("Encontré la comida!! En el intento: ", stamina)
+            break
+
+        # print("Posición",casilla)
+
+        # cas_objetivo
+
+        # casilla_objetivo = entorno[dir]
 
         # Luego compruebo si estoy en la comida para pararlo
 
@@ -426,8 +464,8 @@ def main():
 
     eliminadorParejasVerticales()
 
-    hormiguero(win)
-    comida(win)
+    horm = hormiguero(win)
+    comi = comida(win)
 
     print("Terminé!")
 
@@ -437,6 +475,10 @@ def main():
     run = True
 
     pintarR02(bordX,bordY,win)
+
+    # Saco a pasear a la hormiga
+
+    paseo_hormiga1(horm,comi)
 
     # Mientras no la cambies a False, sigue corriendo en loop
     while run:
@@ -449,6 +491,9 @@ def main():
         # si actualizo datos, puedos pintarlos en este loop
         # pintarR02(50,50,win)
         pygame.display.update()
+
+
+
 
 
 main()
