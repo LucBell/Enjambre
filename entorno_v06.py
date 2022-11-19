@@ -389,6 +389,8 @@ def paseo_hormiga1(horm,comi):
     pos_horm = (horm)
     casilla = entorno[pos_horm]
 
+    recorrido_hormiga.append(pos_horm)
+
     print("Posición inicial: ",horm, casilla)
     print("Objetivo: ",comi, entorno[comi])
 
@@ -416,12 +418,14 @@ def paseo_hormiga1(horm,comi):
             # recorrido_hormiga += pos_horm
             casilla = entorno[pos_horm]
             print ("Me muevo a: ", pos_horm, casilla)
+            recorrido_hormiga.append(pos_horm)
         else:
             # print("No me muevo y lo intento de nuevo")
             pass
 
         if pos_horm== comi:
             print("Encontré la comida!! En el intento: ", stamina)
+            print(recorrido_hormiga)
             break
 
         # print("Posición",casilla)
