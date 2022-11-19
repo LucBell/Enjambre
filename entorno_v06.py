@@ -38,8 +38,8 @@ bordY = 20
 # tamY = int(input("Tamaño Vertical 96? "))
 # bordes = int(input("Porcentaje de bordes (1-100) 25?"))
 
-tamX = 3
-tamY = 3
+tamX = 10
+tamY = 10
 bordes = 15
 
 ##print(tamX)
@@ -398,7 +398,7 @@ def paseo_hormiga1(horm,comi):
 
     # Creo un loop hasta que encuentre la comida
 
-    aguante_hormiga = 100
+    aguante_hormiga = 500
 
     for stamina in range(1,aguante_hormiga+1):
         # Decido hacia donde me muevo
@@ -417,7 +417,7 @@ def paseo_hormiga1(horm,comi):
             pos_horm += direcciones[dir_objetivo-1]
             # recorrido_hormiga += pos_horm
             casilla = entorno[pos_horm]
-            print ("Me muevo a: ", pos_horm, casilla)
+            # print ("Me muevo a: ", pos_horm, casilla)
             # print ("He recorrido: ", recorrido_hormiga)
             
             # Aquí voy a añadir la casilla al recorrido
