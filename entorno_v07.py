@@ -11,7 +11,7 @@ import pygame
 import time
 import turtle
 
-from pygame.locals import *
+# from pygame.locals import *
 
 # Inicializa pygame
 
@@ -48,7 +48,7 @@ bordY = 20
 
 tamX = 10
 tamY = 10
-bordes = 20
+bordes = 25
 
 ##print(tamX)
 ##print(tamY)
@@ -485,7 +485,7 @@ def text_on_screen(win):
 
     # Campo para el tamaño
     # Texto inicial
-    text3 = bordx 
+    text3 = str(tamX)+"x"+str(tamY)
     img3 = fontB.render(text3, True, 0)
     win.blit(img3, (120, 80))
 
