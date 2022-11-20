@@ -2,10 +2,15 @@
 
 # Carga Librerías
 
+import os
+# Lugar donde aparece la ventana
+os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0,0)
+
 import random # Para los números aleatorios
 import pygame
 import time
 import turtle
+
 
 # Inicializa pygame
 
@@ -20,12 +25,14 @@ entorno = []
 
 # Tamaño Display
 
-dispX = 1600
-dispY = 1000
+dispX = 1900
+dispY = 1010
+
+
 
 # Tamaño Bordes
 
-bordX = 20
+bordX = 300
 bordY = 20
 
 # Longitud de la lista
@@ -458,7 +465,10 @@ def paseo_hormiga1(horm,comi):
         # Luego compruebo si estoy en la comida para pararlo
 
 
-
+def text_on_screen(win):
+    font = pygame.font.SysFont(None, 24)
+    img = font.render("Swarm", True, 1)
+    win.blit(img, (20, 20))
 
 
 
@@ -469,13 +479,15 @@ def main():
     win = pygame.display.set_mode((dispX,dispY))
 
     # Establecer el título de la ventana
-    pygame.display.set_caption("Ventana de Test1")
+    pygame.display.set_caption("Swarm AI")
 
     # La pinta de color blanco el fondo
     win.fill((255,255,255))
 
     # Ejecución de programa
     # Quitar las señales a las partes que quiero ejecutar
+
+    text_on_screen(win)
 
     carga_del_entorno()
 
