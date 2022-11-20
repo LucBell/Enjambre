@@ -11,6 +11,7 @@ import pygame
 import time
 import turtle
 
+from pygame.locals import *
 
 # Inicializa pygame
 
@@ -466,13 +467,55 @@ def paseo_hormiga1(horm,comi):
 
 
 def text_on_screen(win):
-    font = pygame.font.SysFont(None, 24)
-    img = font.render("Swarm", True, 1)
-    win.blit(img, (20, 20))
+
+    
+
+    # Defino las fuentes
+    fontA = pygame.font.SysFont(None, 50)
+    fontB = pygame.font.SysFont(None, 30)
+
+    # Texto Título
+    text1 = fontA.render("Swarm", True, 0)
+    win.blit(text1, (20, 20))
+    
+    # Textos de datos
+    # Título Tamaño
+    text2 = fontB.render("Tamaño: ", True, 0)
+    win.blit(text2, (20, 80))
+
+    # Campo para el tamaño
+    # Texto inicial
+    text3 = bordx 
+    img3 = fontB.render(text3, True, 0)
+    win.blit(img3, (120, 80))
 
 
 
+    # Esto se supone que es para poder poner los datos, pero no funciona.
 
+    # Rectángulo para tomar los datos
+    # rect3 = img3.get_rect()
+    # rect3.topleft = (120, 80)
+    # cursor3 = Rect(rect3.topright, (3, rect3.height))
+
+    # running = True
+
+    # while running:
+    #     for event in pygame.event.get():
+    #         if event.type == KEYDOWN:
+    #             if event.key == K_BACKSPACE:
+    #                 if len(text3)>0:
+    #                     text3 = text3[:-1]
+    #             else:
+    #                 text3 += event.unicode
+    #             img3 = fontB.render(text3, True, 0)
+    #             rect3.size=img3.get_size()
+    #             cursor3.topleft = rect3.topright
+    
+    #     win.blit(img3, rect3)
+    #     if time.time() % 1 > 0.5:
+    #         pygame.draw.rect(win, 0, cursor3)
+    #     pygame.display.update()
 
 def main():
     # Establecer el tamaño de la ventana y lo mete en una variable
