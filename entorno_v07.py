@@ -465,6 +465,10 @@ def paseo_hormiga1(horm,comi):
 
         # Luego compruebo si estoy en la comida para pararlo
 
+def pintar_camino(recorrido_hormiga):
+    for celda_a_pintar in range (1,len(recorrido_hormiga)-1):
+        
+
 
 def text_on_screen(win):
 
