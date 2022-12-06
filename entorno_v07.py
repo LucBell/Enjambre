@@ -638,8 +638,9 @@ def main():
 
     carga_entorno()
 
-
-
+    # Defino dónde está el hormiguero y dónde la comida
+    # Esto lo tengo que meter en un fichero para poder guardarlo
+    
     horm = hormiguero(win)
     comi = comida(win)
 
