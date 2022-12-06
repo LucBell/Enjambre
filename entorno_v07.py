@@ -46,8 +46,8 @@ bordY = 20
 # tamY = int(input("Tamaño Vertical 96? "))
 # bordes = int(input("Porcentaje de bordes (1-100) 25?"))
 
-tamX = 10
-tamY = 10
+tamX = 5
+tamY = 5
 bordes = 25
 
 ##print(tamX)
@@ -353,7 +353,11 @@ def hormiguero(win):
     tcY = (dispY-40)/tamY
     tc = min (tcX, tcY)
 
-    pygame.draw.rect(win, (201, 135, 58), (ch_X*tc+bordX,ch_Y*tc+bordY, tc, tc), 0)
+    # Para que los cuadrados no tapen los bordes, les quito un 10% de área.
+
+    bordeblanco = tc/10
+
+    pygame.draw.rect(win, (201, 135, 58), (ch_X*tc+bordX+bordeblanco,ch_Y*tc+bordY+bordeblanco, tc-bordeblanco*2, tc-bordeblanco*2), 0)
 
     print ("Coord horm",ch_X, ch_Y, ch_X*tc, ch_Y*tc )
 
@@ -381,16 +385,20 @@ def comida(win):
     tcY = (dispY-40)/tamY
     tc = min (tcX, tcY)
 
+    # Para que los cuadrados no tapen los bordes, les quito un 10% de área.
+
+    bordeblanco = tc/10
+
     # Dibujo rectágulo en la casilla seleccionada
 
-    pygame.draw.rect(win, (41, 158, 41), (cc_X*tc+bordX,cc_Y*tc+bordY, tc, tc), 0)
+    pygame.draw.rect(win, (41, 158, 41), (cc_X*tc+bordX+bordeblanco,cc_Y*tc+bordY+bordeblanco, tc-bordeblanco*2, tc-bordeblanco*2), 0)
 
     # print ("Coord comi",cc_X, cc_Y, cc_X*tc, cc_Y*tc )
 
     return comi
 
 
-def paseo_hormiga1(horm,comi):
+def paseo_hormiga1(win,horm,comi):
     # Hormiga que pasea por el hormiguero y que cuando encuentra la comida,
     # vuelve marcando las casillas como "comida encontrada"
     # también tiene que levantar muros si se encuentra casillas bloqueadas
@@ -455,6 +463,9 @@ def paseo_hormiga1(horm,comi):
             print("Encontré la comida!! En el intento: ", stamina)
             print("He necesitado los siguientes pasos: ", len(recorrido_hormiga))
             print(recorrido_hormiga)
+
+            pintar_camino(win, recorrido_hormiga)
+
             break
 
         # print("Posición",casilla)
@@ -465,9 +476,36 @@ def paseo_hormiga1(horm,comi):
 
         # Luego compruebo si estoy en la comida para pararlo
 
-def pintar_camino(recorrido_hormiga):
+def pintar_camino(win, recorrido_hormiga):
+    # Con esta función quiero pintar el recorrido que ha seguido la hormiga.
+
+    # Creo que lo podría simplificar simplemente recorriendo la variable
+    # recorrido_hormiga con la función for
     for celda_a_pintar in range (1,len(recorrido_hormiga)-1):
         
+        paso_hormiga = recorrido_hormiga[celda_a_pintar]
+        casilla_pintar = entorno[paso_hormiga]
+
+        # print(casilla_pintar)
+
+        # Saco coordenadas de la casilla seleccionada
+        cp_X = casilla_pintar[0]
+        cp_Y = casilla_pintar[1]
+        
+        # El tamaño del cuadrado lo debería hacer con una variable global o no local.
+
+        tcX = (dispX-40)/tamX
+        tcY = (dispY-40)/tamY
+        tc = min (tcX, tcY)
+
+        # Para que los cuadrados no tapen los bordes, les quito un 10% de área.
+        bordeblanco = tc/10        
+    
+        # Dibujo rectágulo en la casilla seleccionada
+
+        pygame.draw.rect(win, (236, 250, 230), (cp_X*tc+bordX+bordeblanco,cp_Y*tc+bordY+bordeblanco, tc-bordeblanco*2, tc-bordeblanco*2), 0)
+        
+
 
 
 def text_on_screen(win):
@@ -562,7 +600,7 @@ def main():
 
     # Saco a pasear a la hormiga
 
-    paseo_hormiga1(horm,comi)
+    paseo_hormiga1(win,horm,comi)
 
     # Mientras no la cambies a False, sigue corriendo en loop
     while run:
