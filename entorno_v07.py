@@ -559,6 +559,16 @@ def text_on_screen(win):
     #         pygame.draw.rect(win, 0, cursor3)
     #     pygame.display.update()
 
+def guardar_hormiguero(entorno):
+    with open("DatosEntorno.txt",'w',encoding = 'utf-8') as f:
+        for casillas in entorno:
+            for datos in casillas:
+                f.write(str(datos))
+            f.write("-")
+
+
+
+
 def main():
     # Establecer el tamaño de la ventana y lo mete en una variable
     win = pygame.display.set_mode((dispX,dispY))
@@ -586,6 +596,10 @@ def main():
 
     eliminadorParejasVerticales()
 
+    # Ahora guardo en un fichero mi hormiguero
+
+    guardar_hormiguero(entorno)
+
     horm = hormiguero(win)
     comi = comida(win)
 
@@ -612,6 +626,8 @@ def main():
 
         # si actualizo datos, puedos pintarlos en este loop
         # pintarR02(50,50,win)
+        
+        # Esto es fundamental para que se vea bien lo que pinto.
         pygame.display.update()
 
 
