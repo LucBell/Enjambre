@@ -56,7 +56,7 @@ bordes = 25
 
 # Carga de la lista
 
-def carga_del_entorno():
+def genera_el_entorno():
     
     # Con esta función creamos los bordes aleatorios y los cargamos en la variable entorno
 
@@ -560,13 +560,65 @@ def text_on_screen(win):
     #     pygame.display.update()
 
 def guardar_hormiguero(entorno):
-    with open("DatosEntorno.txt",'w',encoding = 'utf-8') as f:
+    # Función para guardar el entorno en un fichero
+    with open("Datos/DatosEntorno.txt",'w',encoding = 'utf-8') as f:
         for casillas in entorno:
             for datos in casillas:
                 f.write(str(datos))
-            f.write("-")
+            # f.write("-")
 
+def obtener_entorno_de_fichero():
+    # Función para cargar el entorno de un fichero en vez de generarlo cada vez.
 
+    global entorno
+
+    with open("Datos/DatosEntorno.txt",'r',encoding = 'utf-8') as f:
+        # Saco el tamaño del entorno
+        file_stat= os.stat("Datos/DatosEntorno.txt")
+        file_size = file_stat.st_size
+
+        # Calculo cuantas casillas tiene el fichero
+
+        numero_casillas = int(file_size/6)
+
+        #print("Número de casillas= ", numero_casillas)
+
+        # Saco los datos de cada casilla y lo meto en el entorno
+
+        for casilla in range(numero_casillas):
+            # Defino una lista para cada casilla
+            def_casilla = []
+
+            # Relleno la lista de la casilla con sus datos
+            for coord in range (6):
+                # print("Coord: ",coord)
+                dato = f.read(1)
+                #print("Dato: ",dato)
+                dato_num = int(dato)
+                def_casilla += [dato_num]
+            #print("Def_casilla: ",def_casilla)
+            
+            # Meto toda la casilla en la variable entorno
+            entorno += [def_casilla]
+            
+            # Borro los datos de la variable
+            del def_casilla
+        # print(entorno)
+
+def carga_entorno():
+    respuesta = input("Genero nuevo el entorno (si o no): ") 
+    if respuesta == "si":
+        genera_el_entorno()
+        homogeneiza_bordes()
+        libera_cuadrados()
+        eliminadorParejasVerticales()
+         
+    elif respuesta == "no":
+        obtener_entorno_de_fichero()
+         
+    else: 
+        print("Por favor solo respuestas si o no")
+        pygame.quit()
 
 
 def main():
@@ -584,21 +636,9 @@ def main():
 
     text_on_screen(win)
 
-    carga_del_entorno()
+    carga_entorno()
 
-    homogeneiza_bordes()
 
-    print("Ahora vamos a liberar cuadrados...")
-
-    libera_cuadrados()
-
-    print("Ahora probamos a eliminar las parejas cerradas interiores...")
-
-    eliminadorParejasVerticales()
-
-    # Ahora guardo en un fichero mi hormiguero
-
-    guardar_hormiguero(entorno)
 
     horm = hormiguero(win)
     comi = comida(win)
@@ -635,6 +675,12 @@ def main():
 
 
 main()
+
+# Antes de salir guardo en un fichero mi hormiguero
+
+print(entorno)
+guardar_hormiguero(entorno)
+
 pygame.quit()
 
 # --------------------------------------------------------------

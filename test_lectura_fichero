@@ -1,0 +1,46 @@
+
+import os
+
+entorno = []
+
+def obtener_entorno_de_fichero():
+    # Función para cargar el entorno de un fichero en vez de generarlo cada vez.
+
+    global entorno
+
+    with open("Datos/DatosEntorno.txt",'r',encoding = 'utf-8') as f:
+        # Saco el tamaño del entorno
+        file_stat= os.stat("Datos/DatosEntorno.txt")
+        file_size = file_stat.st_size
+
+        # Calculo cuantas casillas tiene el fichero
+
+        numero_casillas = int(file_size/6)
+
+        #print("Número de casillas= ", numero_casillas)
+
+        # Saco los datos de cada casilla y lo meto en el entorno
+
+        for casilla in range(numero_casillas):
+            # Defino una lista para cada casilla
+            def_casilla = []
+
+            # Relleno la lista de la casilla con sus datos
+            for coord in range (6):
+                # print("Coord: ",coord)
+                dato = f.read(1)
+                #print("Dato: ",dato)
+                dato_num = int(dato)
+                def_casilla += [dato_num]
+            #print("Def_casilla: ",def_casilla)
+            
+            # Meto toda la casilla en la variable entorno
+            entorno += [def_casilla]
+            
+            # Borro los datos de la variable
+            del def_casilla
+        # print(entorno)
+
+
+
+obtener_entorno_de_fichero()
