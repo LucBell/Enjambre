@@ -1,0 +1,9 @@
+TO DOs
+Cosas que tengo que hacer en este programa
+
+1. Terminar de desarrollar las hormigas.
+    a. Que tapen pasillos que acaban cerrados.
+    b. Que gestionen plazas.
+    c. Que gestionen rotondas.
+
+2. Desarrollar la generación de hormigas.
