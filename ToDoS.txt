@@ -2,8 +2,33 @@ TO DOs
 Cosas que tengo que hacer en este programa
 
 1. Terminar de desarrollar las hormigas.
-    a. Que tapen pasillos que acaban cerrados.
-    b. Que gestionen plazas.
-    c. Que gestionen rotondas.
+    1b. Que gestionen plazas.
+    1c. Que gestionen rotondas.
+    1d. Crear variable feromona, utilizarla y que influya en las hormigas.
 
 2. Desarrollar la generación de hormigas.
+
+
+3. Display.
+    3a. Aprender a poner botones y un menú del juego sin tener que pasar por la consola.
+
+
+4. Otros
+    4a. Guardar la posición de hormiguero y comida.
+    4b. Independizar de los programas el dibujo de cuadrados.
+        Poner todo ese código en un programa aparte.
+    4c. Simplificar toda la parte original de dibujo del laberinto.
+        Lo hice complicado para ser rápido pero en Phyton no tiene sentido.
+    4d. Pensar si desarrollo la apertura de zonas cerradas del laberinto.
+    4e. Separar el programa en dos:
+        4e1. Un programa de generación aleatoria de laberintos que se almacenan en
+            ficheros.
+        4e2. Un programa de resolución de laberintos almacenados en ficheros.
+
+
+ToDoS Cerrados:
+
+08/12/2022
+
+1. Terminar de desarrollar las hormigas.
+    1a. Que tapen pasillos que acaban cerrados.

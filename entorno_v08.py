@@ -19,9 +19,11 @@ pygame.font.init()
 
 # Declaraciones variables principales
 
-# Variable Entorno es una lista
+# Variable Entorno y feromona son listas
 
 entorno = []
+feromona = []
+
 # print(type(entorno))
 
 # Tamaño Display
@@ -214,8 +216,11 @@ def eliminadorParejasVerticales():
         for casY in range(0,tamY-2):
             casilla = tamY + casX*tamY + casY + 1
             casillaCheck = entorno[casilla]
-            sumaBordes = sum(casillaCheck[2:6]) # se suma desde el item 3 (los anteriores son el 0 y el 1, hasta el item (6-1) = 5)
-            ## print("Suma casillas: ", casillaCheck, sumaBordes)
+
+            # se suma desde el item 3 (los anteriores son el 0 y el 1, hasta el item (6-1) = 5)
+            sumaBordes = sum(casillaCheck[2:6]) 
+            
+            # print("Suma casillas: ", casillaCheck, sumaBordes)
             if sumaBordes == 3:
                 bordeLibre = casillaCheck.index(0,2)
                 ## print("Candidato!",casillaCheck,bordeLibre)
@@ -288,7 +293,7 @@ def unificaBordesConAdyacentesCasilla(bordeLibre, casillaCheck,casilla):
 # --------------------------------------------------------------
 
 
-def pintarR02(origenX,origenY,win):
+def pintar_hormiguero(origenX,origenY,win):
     
 # Utilizando pygame defino una función para pintar el entorno
 # Esto lo hice complicado porque estaba en turtle e iba muy lento
@@ -298,17 +303,17 @@ def pintarR02(origenX,origenY,win):
    
     for casilla in range(0, tamY):
         casillaCheck = entorno[casilla]
-        pintarR02a(origenX,origenY,casillaCheck,win)
+        pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
 
         casillaCheck = entorno[casilla+tamY*(tamX-1)]
-        pintarR02a(origenX,origenY,casillaCheck,win)
+        pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
 
     for casilla in range(0, tamX-1):
         casillaCheck = entorno[tamY+casilla*tamY]
-        pintarR02a(origenX,origenY,casillaCheck,win)
+        pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
 
         casillaCheck = entorno[tamY*2-1+casilla*tamY]
-        pintarR02a(origenX,origenY,casillaCheck,win)
+        pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
 
 # Luego el interior alternando celdas
 
@@ -322,10 +327,10 @@ def pintarR02(origenX,origenY,win):
             casillaCheck = entorno[tamY+1+columna*tamY+fila*2+tieneQueSerImpar]
             ## print(columna, fila,casillaCheck,tieneQueSerImpar)
 
-            pintarR02a(origenX,origenY,casillaCheck,win)
+            pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
 
-def pintarR02a(origenX,origenY,casillaCheck,win):
-
+def pintar_bordes_casilla(origenX,origenY,casillaCheck,win):
+    # Programa para pintar los bordes de una casilla determinada
     # Defino el tamaño de las casillas y el origen de cada una
     # 10 para tamaño pequeño
 
@@ -350,14 +355,14 @@ def pintarR02a(origenX,origenY,casillaCheck,win):
     if casillaCheck[5]==1:
         pygame.draw.line(win, (0, 0, 0), (posX+tc, posY), (posX, posY), 3)
 
-def hormiguero(win):
-    # Selecciono origen hormiguero aleatorio
-    horm = random.randint(0,len(entorno)-1)
-    print ("Hormiguero en: ",horm)
-    print (entorno[horm])
-    casilla_horm = entorno[horm]
-    ch_X = casilla_horm[0]
-    ch_Y = casilla_horm[1]
+
+def pinto_cuadro (win, color, casilla):
+
+    # Programa para pintar cuadros en el hormiguero
+
+    casilla_pintar = entorno[casilla]
+    coord_X = casilla_pintar[0]
+    coord_Y = casilla_pintar[1]
 
     # El tamaño del cuadrado lo debería hacer con una variable global o no local.
 
@@ -369,45 +374,43 @@ def hormiguero(win):
 
     bordeblanco = tc/10
 
-    pygame.draw.rect(win, (201, 135, 58), (ch_X*tc+bordX+bordeblanco,ch_Y*tc+bordY+bordeblanco, tc-bordeblanco*2, tc-bordeblanco*2), 0)
+    # Dibujo el cuadrado
 
-    print ("Coord horm",ch_X, ch_Y, ch_X*tc, ch_Y*tc )
+    pygame.draw.rect(win, color, (coord_X*tc+bordX+bordeblanco,coord_Y*tc+bordY+bordeblanco, tc-bordeblanco*2, tc-bordeblanco*2), 0)
+
+
+def hormiguero(win):
+    # Selecciono origen hormiguero aleatorio
+    # horm = random.randint(0,len(entorno)-1)
+
+    # Fijo el hormiguero en un punto fijo
+    horm = 16
+
+    print ("Hormiguero en: ",horm)
+    print (entorno[horm])
+    
+    color_hormiguero = (201, 135, 58)
+
+    pinto_cuadro(win, color_hormiguero, horm)
 
     return horm
 
 def comida(win):
+    # Selecciono origen hormiguero aleatorio
+    # comi = random.randint(0,len(entorno)-1)
 
-    # Selecciono destino comida aleatorio
-    # Pendientes: Si sale el mismo sitio que el hormiguero, tendría que buscar otro sitio.
-    
-    comi = random.randint(0,len(entorno)-1)
+    # Fijo el hormiguero en un punto fijo
+    comi = 10
 
     # print ("Comida en: ",comi)
     # print (entorno[comi])
+    
+    color_comida = (41, 158, 41)
 
-    # Saco coordenadas de la casilla seleccionada
-
-    casilla_comi = entorno[comi]
-    cc_X = casilla_comi[0]
-    cc_Y = casilla_comi[1]
-
-    # El tamaño del cuadrado lo debería hacer con una variable global o no local.
-
-    tcX = (dispX-40)/tamX
-    tcY = (dispY-40)/tamY
-    tc = min (tcX, tcY)
-
-    # Para que los cuadrados no tapen los bordes, les quito un 10% de área.
-
-    bordeblanco = tc/10
-
-    # Dibujo rectágulo en la casilla seleccionada
-
-    pygame.draw.rect(win, (41, 158, 41), (cc_X*tc+bordX+bordeblanco,cc_Y*tc+bordY+bordeblanco, tc-bordeblanco*2, tc-bordeblanco*2), 0)
-
-    # print ("Coord comi",cc_X, cc_Y, cc_X*tc, cc_Y*tc )
+    pinto_cuadro(win, color_comida, comi)
 
     return comi
+
 
 
 def paseo_hormiga1(win,horm,comi):
@@ -434,7 +437,7 @@ def paseo_hormiga1(win,horm,comi):
 
     # Creo un loop hasta que encuentre la comida
 
-    aguante_hormiga = 500
+    aguante_hormiga = 80
 
     for stamina in range(1,aguante_hormiga+1):
         # Decido hacia donde me muevo
@@ -448,13 +451,47 @@ def paseo_hormiga1(win,horm,comi):
         casilla = entorno[pos_horm]
 
         if casilla[dir_objetivo+1] == 0:
+            # Almaceno en una lista cómo varía el indicador de posición según
+            # en qué dirección se mueva la hormiga
             direcciones = [-tamY,1,tamY,-1]
-            # print("Sumar para mover?: ", direcciones[dir_objetivo-1])
-            pos_horm += direcciones[dir_objetivo-1]
-            # recorrido_hormiga += pos_horm
+
+            # Compruebo si la nueva casilla es un callejón sin salida
+            # Lo hago sumando el número de paredes
+            pos_horm_futura = pos_horm + direcciones[dir_objetivo-1]
+            casilla_futura = entorno[pos_horm_futura]
+            barreras_casilla_futura = casilla_futura[2]+casilla_futura[3]+casilla_futura[4]+casilla_futura[5]
+            
+            if barreras_casilla_futura==3 and pos_horm_futura!=horm:
+                print("Callejón!")
+                # print("Casilla actual: ", casilla)
+                # print("Casilla futura: ", casilla_futura)
+
+                # Levanto un muro en la casilla
+                print("Antes de levantar muro: ",casilla)
+                casilla[dir_objetivo+1] = 1
+                print("Después de levantar muro: ",casilla)
+
+                # Pinto el muro nuevo en la casilla
+                pintar_bordes_casilla(bordX,bordY,casilla,win)
+                
+                # Calculo la dirección opuesta
+                if dir_objetivo > 2:
+                    dir_opuesta = dir_objetivo-2
+                else:
+                    dir_opuesta = dir_objetivo+2
+                
+                #Levanto un muro en la casilla opuesta
+                casilla_futura[dir_opuesta+1] = 1
+                print("Callejón cerrado: ", casilla_futura)
+
+            # Si no es un callejón
+            # cambio la posición de la hormiga
+            else:
+                pos_horm += direcciones[dir_objetivo-1]
+
             casilla = entorno[pos_horm]
-            # print ("Me muevo a: ", pos_horm, casilla)
-            # print ("He recorrido: ", recorrido_hormiga)
+            #print ("Me muevo a: ", pos_horm, casilla)
+            #print ("He recorrido: ", recorrido_hormiga)
             
             # Aquí voy a añadir la casilla al recorrido
             # o si he hecho un bucle, lo voy a borrar
@@ -467,7 +504,7 @@ def paseo_hormiga1(win,horm,comi):
             else:
                 recorrido_hormiga.append(pos_horm)
             
-            print ("He recorrido: ", recorrido_hormiga)
+            # print ("He recorrido: ", recorrido_hormiga)
 
         else:
             # print("No me muevo y lo intento de nuevo")
@@ -476,7 +513,7 @@ def paseo_hormiga1(win,horm,comi):
         if pos_horm== comi:
             print("Encontré la comida!! En el intento: ", stamina)
             print("He necesitado los siguientes pasos: ", len(recorrido_hormiga))
-            print(recorrido_hormiga)
+            print("He recorrido: ",recorrido_hormiga)
 
             pintar_camino(win, recorrido_hormiga)
 
@@ -489,6 +526,11 @@ def paseo_hormiga1(win,horm,comi):
         # casilla_objetivo = entorno[dir]
 
         # Luego compruebo si estoy en la comida para pararlo
+        
+        # Si llego al final del loop sin haber encontrado nada pongo un mensaje
+        if stamina == aguante_hormiga:
+            print ("Intento ",stamina," y no encontré la comida...")
+            break
 
 def pintar_camino(win, recorrido_hormiga):
     # Con esta función quiero pintar el recorrido que ha seguido la hormiga.
@@ -675,7 +717,7 @@ def main():
     # Defines la variable
     run = True
 
-    pintarR02(bordX,bordY,win)
+    pintar_hormiguero(bordX,bordY,win)
 
     # Saco a pasear a la hormiga
 
@@ -686,7 +728,9 @@ def main():
     # Antes de salir guardo en un fichero mi hormiguero
 
     # print("Este es el entorno que estás utilizando: ",entorno)
-    guardar_hormiguero()
+    
+    # Desactivo la grabación del hormiguero para que no se guarden los cambios que hago en el mismo.
+    # guardar_hormiguero()
     # print("Hormiguero guardado.")
 
     # Mientras no la cambies a False, sigue corriendo en loop
