@@ -623,6 +623,8 @@ def obtener_entorno_de_fichero():
         # print(entorno)
 
 def carga_entorno():
+    # Esto sirve para generar el hormiguero o cargar el que tenemos guardado
+    
     respuesta = input("Genero nuevo el entorno (s/n): ") 
     if respuesta == "s":
         genera_el_entorno()
@@ -653,7 +655,12 @@ def main():
 
     text_on_screen(win)
 
-    carga_entorno()
+    # Desactivo la carga para que siempre se cargue de fichero
+    # Activar siguiente línea y desactivar la siguiente para que vuelva a preguntar
+    # si queremos generar uno nuevo.
+
+    #carga_entorno()
+    obtener_entorno_de_fichero()
 
     # Defino dónde está el hormiguero y dónde la comida
     # Esto lo tengo que meter en un fichero para poder guardarlo
@@ -674,6 +681,14 @@ def main():
 
     paseo_hormiga1(win,horm,comi)
 
+    pygame.display.update()
+
+    # Antes de salir guardo en un fichero mi hormiguero
+
+    # print("Este es el entorno que estás utilizando: ",entorno)
+    guardar_hormiguero()
+    # print("Hormiguero guardado.")
+
     # Mientras no la cambies a False, sigue corriendo en loop
     while run:
 
@@ -686,7 +701,9 @@ def main():
         # pintarR02(50,50,win)
         
         # Esto es fundamental para que se vea bien lo que pinto.
-        pygame.display.update()
+        # pero no parece que haga falta que esté en el while... salvo que pinte cosas
+        # nuevas
+        # pygame.display.update()
 
 
 
@@ -694,10 +711,7 @@ def main():
 
 main()
 
-# Antes de salir guardo en un fichero mi hormiguero
 
-print(entorno)
-guardar_hormiguero()
 
 pygame.quit()
 
