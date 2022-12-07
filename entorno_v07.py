@@ -109,6 +109,8 @@ def homogeneiza_bordes():
     
     # Homogeneiza los bordes horizontales (se asegura que tienen el borde activado las dos celdas colindantes
 
+    global entorno
+
     for casilla in range(0,len(entorno)-1):
         casillaCheck = entorno[casilla]
         ## print("check", casillaCheck[0:2])
@@ -142,7 +144,9 @@ def homogeneiza_bordes():
 
 def libera_cuadrados():
     
-# Reviso todas las casillas y abro las que están completamente cerradas
+    # Reviso todas las casillas y abro las que están completamente cerradas
+
+    global entorno
 
     for casilla in range(0,len(entorno)):
         casillaCheck = entorno[casilla]
@@ -200,6 +204,12 @@ def libera_cuadrados():
 # --------------------------------------------------------------          
 
 def eliminadorParejasVerticales():
+    # Como su nombre indica, sirve para abrir los espacios
+    # cerrados de dos celdas en formato vertical
+    # solo afecta a las celdas interiores, no a los bordes
+
+    global entorno    
+    
     for casX in range(0,tamX-2):
         for casY in range(0,tamY-2):
             casilla = tamY + casX*tamY + casY + 1
@@ -241,6 +251,8 @@ def eliminadorParejasVerticales():
 def unificaBordesConAdyacentesCasilla(bordeLibre, casillaCheck,casilla):
 
     #Este programa sirve para unificar los bordes modificados con las adyacentes.
+
+    global entorno
 
     # Limpia también casilla anexa al Borde Izquierdo
     ## print("Adyacentes, bordeLibre: ", bordeLibre, " casillaCheck: ",casillaCheck, " Casilla: ", casilla)
@@ -403,6 +415,8 @@ def paseo_hormiga1(win,horm,comi):
     # vuelve marcando las casillas como "comida encontrada"
     # también tiene que levantar muros si se encuentra casillas bloqueadas
 
+    global entorno
+    
     # defino variable con el histórico del paseo
     recorrido_hormiga = []
 
@@ -606,18 +620,18 @@ def obtener_entorno_de_fichero():
         # print(entorno)
 
 def carga_entorno():
-    respuesta = input("Genero nuevo el entorno (si o no): ") 
-    if respuesta == "si":
+    respuesta = input("Genero nuevo el entorno (s/n): ") 
+    if respuesta == "s":
         genera_el_entorno()
         homogeneiza_bordes()
         libera_cuadrados()
         eliminadorParejasVerticales()
          
-    elif respuesta == "no":
+    elif respuesta == "n":
         obtener_entorno_de_fichero()
          
     else: 
-        print("Por favor solo respuestas si o no")
+        print("Por favor solo respuestas s/n...")
         pygame.quit()
 
 
