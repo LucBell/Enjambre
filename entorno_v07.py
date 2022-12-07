@@ -416,7 +416,7 @@ def paseo_hormiga1(win,horm,comi):
     # también tiene que levantar muros si se encuentra casillas bloqueadas
 
     global entorno
-    
+
     # defino variable con el histórico del paseo
     recorrido_hormiga = []
 
@@ -573,8 +573,11 @@ def text_on_screen(win):
     #         pygame.draw.rect(win, 0, cursor3)
     #     pygame.display.update()
 
-def guardar_hormiguero(entorno):
+def guardar_hormiguero():
     # Función para guardar el entorno en un fichero
+
+    global entorno
+
     with open("Datos/DatosEntorno.txt",'w',encoding = 'utf-8') as f:
         for casillas in entorno:
             for datos in casillas:
@@ -694,7 +697,7 @@ main()
 # Antes de salir guardo en un fichero mi hormiguero
 
 print(entorno)
-guardar_hormiguero(entorno)
+guardar_hormiguero()
 
 pygame.quit()
 
