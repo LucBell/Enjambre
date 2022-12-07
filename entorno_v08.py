@@ -9,7 +9,6 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0,0)
 import random # Para los números aleatorios
 import pygame
 import time
-import turtle
 
 # from pygame.locals import *
 
@@ -532,36 +531,19 @@ def paseo_hormiga1(win,horm,comi):
             print ("Intento ",stamina," y no encontré la comida...")
             break
 
+
 def pintar_camino(win, recorrido_hormiga):
     # Con esta función quiero pintar el recorrido que ha seguido la hormiga.
 
-    # Creo que lo podría simplificar simplemente recorriendo la variable
-    # recorrido_hormiga con la función for
+    # Utilizo la función range para omitir el primer y último paso, para no pintar
+    #   encima del hormiguero o la comida.
     for celda_a_pintar in range (1,len(recorrido_hormiga)-1):
         
         paso_hormiga = recorrido_hormiga[celda_a_pintar]
-        casilla_pintar = entorno[paso_hormiga]
+                
+        color_camino = (236, 250, 230)
 
-        # print(casilla_pintar)
-
-        # Saco coordenadas de la casilla seleccionada
-        cp_X = casilla_pintar[0]
-        cp_Y = casilla_pintar[1]
-        
-        # El tamaño del cuadrado lo debería hacer con una variable global o no local.
-
-        tcX = (dispX-40)/tamX
-        tcY = (dispY-40)/tamY
-        tc = min (tcX, tcY)
-
-        # Para que los cuadrados no tapen los bordes, les quito un 10% de área.
-        bordeblanco = tc/10        
-    
-        # Dibujo rectágulo en la casilla seleccionada
-
-        pygame.draw.rect(win, (236, 250, 230), (cp_X*tc+bordX+bordeblanco,cp_Y*tc+bordY+bordeblanco, tc-bordeblanco*2, tc-bordeblanco*2), 0)
-        
-
+        pinto_cuadro(win, color_camino, paso_hormiga)
 
 
 def text_on_screen(win):
@@ -720,9 +702,15 @@ def main():
     pintar_hormiguero(bordX,bordY,win)
 
     # Saco a pasear a la hormiga
-
     paseo_hormiga1(win,horm,comi)
 
+    # Saco a pasear un número "n" de hormigas
+    numero_de_hormigas = 20
+
+    for n in range(1,numero_de_hormigas+1):
+        print("Sale la hormiga: ",n," .............suerte!")
+        paseo_hormiga1(win,horm,comi)
+    
     pygame.display.update()
 
     # Antes de salir guardo en un fichero mi hormiguero
