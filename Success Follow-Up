@@ -1,6 +1,12 @@
 
 Fichero para tener los datos de éxito con diferentes estrategias
 
-1. DatosEntorno 5x5 std - horm: 16 - comida 10
+1. DatosEntorno 5x5 std - horm: 16 - comida 10 - Aguante 80 - 20.000 hormigas
     a. Básico: Exitos = 35%
     b. Con cerrado de callejones: Exitos = 41% +6%
+    c. Con cerrado de plazas: Éxitos = 45% + 4%
+
+2. DatosEntorno 5x5 std 2 plazas - horm: 16 - comida 10 - Aguante 80 - 20.000 hormigas
+    a. Básico: Exitos = 36%
+    b. Con cerrado de callejones: Exitos = 40% + 4%
+    c. Con cerrado de plazas: Éxitos = 44% + 4%
