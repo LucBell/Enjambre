@@ -36,30 +36,23 @@ recorrido_corto_num = 0
 recorrido_corto = []
 track_success = [exitos,fracasos,total_intentos,exitos_porc,fracasos_porc,recorrido_corto_num,recorrido_corto]
 
-# print(type(entorno))
-
 # Tamaño Display
-
 dispX = 1900
 dispY = 1010
 
-
-
 # Tamaño Bordes
-
 bordX = 300
 bordY = 20
 
 # Longitud de la lista
-
 # print("Longitud Lista: ",len(entorno))
 
 # Pedir Tamaño del mapa y % de bordes
-
 # tamX = int(input("Tamaño Horizontal 156? "))
 # tamY = int(input("Tamaño Vertical 96? "))
 # bordes = int(input("Porcentaje de bordes (1-100) 25?"))
 
+# Fijo el Tamaño para test
 tamX = 5
 tamY = 5
 bordes = 25
@@ -68,7 +61,9 @@ bordes = 25
 ##print(tamY)
 ##print(type(tamX))
 
-
+# Almaceno en una lista cómo varía el indicador de posición según
+# en qué dirección se mueva la hormiga
+direcciones = [-tamY,1,tamY,-1]
 
 def carga_inicial_feromona():
     # Programa que carga con ceros la lista feromona al inicio
@@ -441,6 +436,7 @@ def paseo_hormiga1(win,horm,comi):
     # vuelve marcando las casillas como "comida encontrada"
     # también tiene que levantar muros si se encuentra casillas bloqueadas
 
+    # Carga variables globales
     global entorno
     global exitos, fracasos, recorrido_corto
 
@@ -448,21 +444,18 @@ def paseo_hormiga1(win,horm,comi):
     recorrido_hormiga = []
 
     # Coloco la hormiga en el hormiguero
-
     pos_horm = (horm)
     casilla = entorno[pos_horm]
-
     recorrido_hormiga.append(pos_horm)
 
-    print("Posición inicial: ",horm, casilla)
-    print("Objetivo: ",comi, entorno[comi])
+    # Textos para ayudarme a analizar el código
+    # print("Posición inicial: ",horm, casilla)
+    # print("Objetivo: ",comi, entorno[comi])
 
     # recorrido_hormiga += pos_horm
 
     # Creo un loop hasta que encuentre la comida
-
-    aguante_hormiga = 80
-
+    aguante_hormiga = 10
     for stamina in range(1,aguante_hormiga+1):
         # Decido hacia donde me muevo
         # Aquí habrá que poner probabilidades según las indicaciones
@@ -475,12 +468,9 @@ def paseo_hormiga1(win,horm,comi):
         casilla = entorno[pos_horm]
 
         if casilla[dir_objetivo+1] == 0:
-            # Almaceno en una lista cómo varía el indicador de posición según
-            # en qué dirección se mueva la hormiga
-            direcciones = [-tamY,1,tamY,-1]
 
             # Compruebo si es un callejón y tomo medidas
-            mueve = comprueba_callejon(win, horm, casilla, pos_horm, direcciones, dir_objetivo)
+            mueve = comprueba_callejon(win, horm, casilla, pos_horm, dir_objetivo)
             
             # Pongo este cuando quiero probar sin localizador de callejones
             # mueve = True
@@ -532,12 +522,6 @@ def paseo_hormiga1(win,horm,comi):
 
             break
 
-        # print("Posición",casilla)
-
-        # cas_objetivo
-
-        # casilla_objetivo = entorno[dir]
-
         # Luego compruebo si estoy en la comida para pararlo
         
         # Si llego al final del loop sin haber encontrado nada pongo un mensaje
@@ -548,8 +532,50 @@ def paseo_hormiga1(win,horm,comi):
             fracasos+= 1
 
             break
+        # Compruebo si he entrado en una plaza y levanto muro
+        comprueba_plaza(win,casilla,pos_horm,dir_objetivo)
 
-def comprueba_callejon(win, horm, casilla, pos_horm, direcciones, dir_objetivo):
+
+def comprueba_plaza(win,casilla,pos_horm,dir_objetivo):
+    # Programa para comprobar si hemos entrado en una plaza
+    #   En caso afirmativo, levanta una pared para deshacer la plaza
+
+    global entorno
+
+    print("Casilla: ", casilla, " Dir Objetivo: ", dir_objetivo)
+
+    # Meto la función try para evitar errores con comprobaciones fuera del entorno
+    try:
+        if dir_objetivo == 1:
+            celda_anexa_delante = entorno[pos_horm+direcciones[1-1]]
+            celda_anexa_lado_izdo = entorno[pos_horm+direcciones[2-1]]
+            celda_anexa_lado_dcho = entorno[pos_horm+direcciones[4-1]]
+            bordes_plaza_izda = celda_anexa_delante[2-1]+celda_anexa_delante[3-1]+celda_anexa_lado_izdo[1-1]+celda_anexa_lado_izdo[4-1]
+            bordes_plaza_dcha = celda_anexa_delante[4-1]+celda_anexa_delante[3-1]+celda_anexa_lado_dcho[1-1]+celda_anexa_lado_dcho[2-1]
+            if bordes_plaza_izda ==0 or bordes_plaza_dcha ==0:
+                # Si detecto plaza, levanto un muro delante (como si hubiese un callejón delante)
+                pos_horm_futura = pos_horm + direcciones[dir_objetivo-1]
+                casilla_futura = entorno[pos_horm_futura]
+                levantar_muro_delante(win, casilla, casilla_futura,dir_objetivo)
+        if dir_objetivo == 2:
+            celda_anexa_delante = entorno[pos_horm+direcciones[2-1]]
+            print(celda_anexa_delante)
+            celda_anexa_lado_izdo = entorno[pos_horm+direcciones[3-1]]
+            print(celda_anexa_lado_izdo)
+            celda_anexa_lado_dcho = entorno[pos_horm+direcciones[1-1]]
+            print(celda_anexa_lado_dcho)
+            bordes_plaza_izda = celda_anexa_delante[4-1]+celda_anexa_delante[3-1]+celda_anexa_lado_izdo[2-1]+celda_anexa_lado_izdo[1-1]
+            bordes_plaza_dcha = celda_anexa_delante[4-1]+celda_anexa_delante[1-1]+celda_anexa_lado_dcho[2-1]+celda_anexa_lado_dcho[3-1]
+            if bordes_plaza_izda ==0 or bordes_plaza_dcha ==0:
+                # Si detecto plaza, levanto un muro delante (como si hubiese un callejón delante)
+                pos_horm_futura = pos_horm + direcciones[dir_objetivo-1]
+                casilla_futura = entorno[pos_horm_futura]
+                levantar_muro_delante(win, casilla, casilla_futura,dir_objetivo)
+    except (RuntimeError, TypeError, NameError, IndexError):
+        pass
+
+
+def comprueba_callejon(win, horm, casilla, pos_horm,dir_objetivo):
     # Programa para comprobar si la hormiga se ha metido en un callejón
     # Devuelve clave de movimiento o no
     # Levanta muro para cerrar el callejón para el futuro
@@ -569,23 +595,7 @@ def comprueba_callejon(win, horm, casilla, pos_horm, direcciones, dir_objetivo):
         # print("Casilla actual: ", casilla)
         # print("Casilla futura: ", casilla_futura)
 
-        # Levanto un muro en la casilla
-        print("Antes de levantar muro: ",casilla)
-        casilla[dir_objetivo+1] = 1
-        print("Después de levantar muro: ",casilla)
-
-        # Pinto el muro nuevo en la casilla
-        pintar_bordes_casilla(bordX,bordY,casilla,win)
-        
-        # Calculo la dirección opuesta
-        if dir_objetivo > 2:
-            dir_opuesta = dir_objetivo-2
-        else:
-            dir_opuesta = dir_objetivo+2
-        
-        #Levanto un muro en la casilla opuesta
-        casilla_futura[dir_opuesta+1] = 1
-        print("Callejón cerrado: ", casilla_futura)
+        levantar_muro_delante(win, casilla, casilla_futura,dir_objetivo)
 
     # Si no es un callejón
     # cambio la posición de la hormiga
@@ -594,7 +604,25 @@ def comprueba_callejon(win, horm, casilla, pos_horm, direcciones, dir_objetivo):
         # pos_horm += direcciones[dir_objetivo-1]
     return mueve
 
+def levantar_muro_delante(win, casilla, casilla_futura,dir_objetivo):
+    # Programa para levantar muros en la casilla y en la opuesta
+    # Levanto un muro en la casilla
+    print("Antes de levantar muro: ",casilla)
+    casilla[dir_objetivo+1] = 1
+    print("Después de levantar muro: ",casilla)
 
+    # Pinto el muro nuevo en la casilla
+    pintar_bordes_casilla(bordX,bordY,casilla,win)
+    
+    # Calculo la dirección opuesta
+    if dir_objetivo > 2:
+        dir_opuesta = dir_objetivo-2
+    else:
+        dir_opuesta = dir_objetivo+2
+    
+    #Levanto un muro en la casilla opuesta
+    casilla_futura[dir_opuesta+1] = 1
+    print("Callejón cerrado: ", casilla_futura)
 
 
 def dejar_feromona(recorrido_hormiga):
@@ -778,60 +806,49 @@ def main():
     # Desactivo la carga para que siempre se cargue de fichero
     # Activar siguiente línea y desactivar la siguiente para que vuelva a preguntar
     # si queremos generar uno nuevo.
-
     #carga_entorno()
     obtener_entorno_de_fichero()
 
     # Defino dónde está el hormiguero y dónde la comida
     # Esto lo tengo que meter en un fichero para poder guardarlo
-    
     horm = hormiguero(win)
     comi = comida(win)
 
-    print("Terminé!")
-
-    # Ejemplo de como mantener un programa corriendo hasta que cambias una variable.
-
-    # Defines la variable
-    run = True
-
+    # Pinto el hormiguero
     pintar_hormiguero(bordX,bordY,win)
 
-    # Saco a pasear a la hormiga
-    paseo_hormiga1(win,horm,comi)
 
     # Saco a pasear un número "n" de hormigas
-    numero_de_hormigas = 20000
-
+    numero_de_hormigas = 2
     for n in range(1,numero_de_hormigas+1):
         print("Sale la hormiga: ",n," .............suerte!")
         paseo_hormiga1(win,horm,comi)
     
     print("Feromona final: ",feromona)
 
+    # Programa que me dice cómo lo estoy haciendo para comparar estrategias
     recuento_de_exitos()
 
+    # Esto es necesario para que se vea lo que pinto
     pygame.display.update()
 
     # Antes de salir guardo en un fichero mi hormiguero
-
     # print("Este es el entorno que estás utilizando: ",entorno)
-    
     # Desactivo la grabación del hormiguero para que no se guarden los cambios que hago en el mismo.
     # guardar_hormiguero()
     # print("Hormiguero guardado.")
 
-    # Mientras no la cambies a False, sigue corriendo en loop
+    # Ejemplo de como mantener un programa corriendo hasta que cambias una variable.
+    # Paso 1. Defines la variable
+    run = True
+    # Paso 2. Mientras no la cambies a False, sigue corriendo en loop
     while run:
-
         # Esto es necesario para que puedas cerrar la ventana creada pulsando en la X de arriba
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 run = False
-
         # si actualizo datos, puedos pintarlos en este loop
         # pintarR02(50,50,win)
-        
         # Esto es fundamental para que se vea bien lo que pinto.
         # pero no parece que haga falta que esté en el while... salvo que pinte cosas
         # nuevas, aun pintando paredes nuevas, no parece hacer falta aquí.
