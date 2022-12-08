@@ -28,6 +28,8 @@ Cosas que tengo que hacer en este programa
             ficheros.
         4e2. Un programa de resolución de laberintos almacenados en ficheros.
     4f. Fin del programa, elegir el camino más corto de los encontrados.
+    4g. He comenzado a cambiar el hormiguero para dejar una fila de datos por fuera, pero afecta a muchas cosas y no creo haberlo arreglado todo.
+        He empezado en la versión 09, pero no sé si seguir por ahí...
 
 
 ToDoS Cerrados:
