@@ -1,0 +1,6 @@
+
+Fichero para tener los datos de éxito con diferentes estrategias
+
+1. DatosEntorno 5x5 std - horm: 16 - comida 10
+    a. Básico: Exitos = 35%
+    b. Con cerrado de callejones: Exitos = 41% +6%

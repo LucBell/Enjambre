@@ -481,6 +481,9 @@ def paseo_hormiga1(win,horm,comi):
 
             # Compruebo si es un callejón y tomo medidas
             mueve = comprueba_callejon(win, horm, casilla, pos_horm, direcciones, dir_objetivo)
+            
+            # Pongo este cuando quiero probar sin localizador de callejones
+            # mueve = True
 
             # Muevo si no ha habido problemas
             if mueve == True:
