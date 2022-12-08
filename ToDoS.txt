@@ -6,6 +6,7 @@ Cosas que tengo que hacer en este programa
     1c. Que gestionen rotondas.
     1e. Que la cantidad de feromona influya en las decisiones de las hormigas.
     1f. Que la feromona se pierda con el tiempo.
+    1g. Pintar los caminos en distinto color en función de la cantidad de feromona.
 
 
 2. Desarrollar la generación de hormigas.
