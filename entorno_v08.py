@@ -20,8 +20,21 @@ pygame.font.init()
 
 # Variable Entorno y feromona son listas
 
+
 entorno = []
 feromona = []
+
+# Defino las variables para medir el éxito de la estrategia
+# Track_sucess es una lista con formato: Éxitos, fracasos, total, % éxitos, % fracasos, número de pasos recorrido más corto, recorrido más corto
+
+exitos = 0
+fracasos = 0
+total_intentos = 0
+exitos_porc = 0
+fracasos_porc = 0
+recorrido_corto_num = 0
+recorrido_corto = []
+track_success = [exitos,fracasos,total_intentos,exitos_porc,fracasos_porc,recorrido_corto_num,recorrido_corto]
 
 # print(type(entorno))
 
@@ -429,6 +442,7 @@ def paseo_hormiga1(win,horm,comi):
     # también tiene que levantar muros si se encuentra casillas bloqueadas
 
     global entorno
+    global exitos, fracasos, recorrido_corto
 
     # defino variable con el histórico del paseo
     recorrido_hormiga = []
@@ -465,39 +479,14 @@ def paseo_hormiga1(win,horm,comi):
             # en qué dirección se mueva la hormiga
             direcciones = [-tamY,1,tamY,-1]
 
-            # Compruebo si la nueva casilla es un callejón sin salida
-            # Lo hago sumando el número de paredes
-            pos_horm_futura = pos_horm + direcciones[dir_objetivo-1]
-            casilla_futura = entorno[pos_horm_futura]
-            barreras_casilla_futura = casilla_futura[2]+casilla_futura[3]+casilla_futura[4]+casilla_futura[5]
-            
-            if barreras_casilla_futura==3 and pos_horm_futura!=horm:
-                print("Callejón!")
-                # print("Casilla actual: ", casilla)
-                # print("Casilla futura: ", casilla_futura)
+            # Compruebo si es un callejón y tomo medidas
+            mueve = comprueba_callejon(win, horm, casilla, pos_horm, direcciones, dir_objetivo)
 
-                # Levanto un muro en la casilla
-                print("Antes de levantar muro: ",casilla)
-                casilla[dir_objetivo+1] = 1
-                print("Después de levantar muro: ",casilla)
-
-                # Pinto el muro nuevo en la casilla
-                pintar_bordes_casilla(bordX,bordY,casilla,win)
-                
-                # Calculo la dirección opuesta
-                if dir_objetivo > 2:
-                    dir_opuesta = dir_objetivo-2
-                else:
-                    dir_opuesta = dir_objetivo+2
-                
-                #Levanto un muro en la casilla opuesta
-                casilla_futura[dir_opuesta+1] = 1
-                print("Callejón cerrado: ", casilla_futura)
-
-            # Si no es un callejón
-            # cambio la posición de la hormiga
-            else:
+            # Muevo si no ha habido problemas
+            if mueve == True:
                 pos_horm += direcciones[dir_objetivo-1]
+            else:
+                pass
 
             casilla = entorno[pos_horm]
             #print ("Me muevo a: ", pos_horm, casilla)
@@ -531,6 +520,13 @@ def paseo_hormiga1(win,horm,comi):
             dejar_feromona(recorrido_hormiga)
             pintar_camino(win, recorrido_hormiga)
 
+            # Actualizo el intento como éxito
+            exitos+= 1
+
+            # Compruebo si el recorrido es el más corto y lo grabo en la variable
+            if len(recorrido_corto) == 0 or len(recorrido_hormiga)<len(recorrido_corto):
+                recorrido_corto=recorrido_hormiga
+
             break
 
         # print("Posición",casilla)
@@ -544,7 +540,58 @@ def paseo_hormiga1(win,horm,comi):
         # Si llego al final del loop sin haber encontrado nada pongo un mensaje
         if stamina == aguante_hormiga:
             print ("Intento ",stamina," y no encontré la comida...")
+
+            # Actualizo el intento como fracaso
+            fracasos+= 1
+
             break
+
+def comprueba_callejon(win, horm, casilla, pos_horm, direcciones, dir_objetivo):
+    # Programa para comprobar si la hormiga se ha metido en un callejón
+    # Devuelve clave de movimiento o no
+    # Levanta muro para cerrar el callejón para el futuro
+
+    global entorno
+
+    # Compruebo si la nueva casilla es un callejón sin salida
+    # Lo hago sumando el número de paredes
+    pos_horm_futura = pos_horm + direcciones[dir_objetivo-1]
+    casilla_futura = entorno[pos_horm_futura]
+    barreras_casilla_futura = casilla_futura[2]+casilla_futura[3]+casilla_futura[4]+casilla_futura[5]
+    
+    if barreras_casilla_futura==3 and pos_horm_futura!=horm:
+        
+        mueve = False
+        print("Callejón!")
+        # print("Casilla actual: ", casilla)
+        # print("Casilla futura: ", casilla_futura)
+
+        # Levanto un muro en la casilla
+        print("Antes de levantar muro: ",casilla)
+        casilla[dir_objetivo+1] = 1
+        print("Después de levantar muro: ",casilla)
+
+        # Pinto el muro nuevo en la casilla
+        pintar_bordes_casilla(bordX,bordY,casilla,win)
+        
+        # Calculo la dirección opuesta
+        if dir_objetivo > 2:
+            dir_opuesta = dir_objetivo-2
+        else:
+            dir_opuesta = dir_objetivo+2
+        
+        #Levanto un muro en la casilla opuesta
+        casilla_futura[dir_opuesta+1] = 1
+        print("Callejón cerrado: ", casilla_futura)
+
+    # Si no es un callejón
+    # cambio la posición de la hormiga
+    else:
+        mueve = True
+        # pos_horm += direcciones[dir_objetivo-1]
+    return mueve
+
+
 
 
 def dejar_feromona(recorrido_hormiga):
@@ -688,8 +735,26 @@ def carga_entorno():
         print("Por favor solo respuestas s/n...")
         pygame.quit()
 
+def recuento_de_exitos():
+    # Programa para hacer el recuento de exitos y almacenarlos
+
+    global exitos, fracasos, recorrido_corto
+
+    # Calculo las variables derivadas y alimento la lista general
+    total_intentos = exitos + fracasos
+    exitos_porc = exitos*100 / total_intentos
+    fracasos_porc = fracasos*100 / total_intentos
+    recorrido_corto_num = len(recorrido_corto)
+    track_success = [exitos,fracasos,total_intentos,exitos_porc,fracasos_porc,recorrido_corto_num,recorrido_corto]
+
+    print("Resultados: ", track_success)
 
 def main():
+    # Este es el programa principal de Ejecución
+    # Tiene algunos trozos de programa, que se podrían delegar fuera, para dejar solo lo principal
+
+    
+    
     # Establecer el tamaño de la ventana y lo mete en una variable
     win = pygame.display.set_mode((dispX,dispY))
 
@@ -733,13 +798,15 @@ def main():
     paseo_hormiga1(win,horm,comi)
 
     # Saco a pasear un número "n" de hormigas
-    numero_de_hormigas = 200
+    numero_de_hormigas = 20000
 
     for n in range(1,numero_de_hormigas+1):
         print("Sale la hormiga: ",n," .............suerte!")
         paseo_hormiga1(win,horm,comi)
     
     print("Feromona final: ",feromona)
+
+    recuento_de_exitos()
 
     pygame.display.update()
 
@@ -770,11 +837,8 @@ def main():
 
 
 
-
+# Ejecuto el programa principal y salgo cuando se termina el mismo.
 main()
-
-
-
 pygame.quit()
 
 # --------------------------------------------------------------
