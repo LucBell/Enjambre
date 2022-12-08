@@ -72,7 +72,7 @@ def carga_inicial_feromona():
 
     for coordX in range(0,tamX):
         for coordY in range(0,tamY):
-            feromona +=[0]
+            feromona +=[1]
     # print("Feromona inicial: ", feromona)
 
 
@@ -110,13 +110,6 @@ def genera_el_entorno():
             if coordY == (tamY-1):
                 bordAr =1
             
-            # Creación de las características de la casilla
-            # Tengo que cambiar el nombre de los bordes, porque al pasar
-            # a Gitpod han cambiado. Ahora tenemos:
-            # 1. bordIz (este no ha cambiado)
-            # 2. bordAb (Cambio!)
-            # 3. bordDe (este no ha cambiado)
-            # 4. bordAr (Cambio!)
             entorno += [[coordX,coordY, bordIz, bordAr, bordDe, bordAb]]
         
     print("Longitud Lista: ",len(entorno))
@@ -466,6 +459,15 @@ def paseo_hormiga1(win,horm,comi):
         # Compruebo si hay barrera
 
         casilla = entorno[pos_horm]
+        
+        # Calculo la probabilidad que tiene cada lado de ser el destino de la hormiga
+        # Esto lo dejo en stand-by hasta que haya solucionado el problema de los bordes.
+        # prob_de_1 = feromona[pos_horm+direcciones[1-1]]*casilla[1+1]
+        # prob_de_2 = feromona[pos_horm+direcciones[2-1]]*casilla[2+1]
+        # prob_de_3 = feromona[pos_horm+direcciones[3-1]]*casilla[3+1]
+        # prob_de_4 = feromona[pos_horm+direcciones[4-1]]*casilla[4+1]
+        # print("Casilla: ",casilla," Probabilidades: ",prob_de_1,prob_de_2,prob_de_3,prob_de_4)
+
 
         if casilla[dir_objetivo+1] == 0:
 
@@ -817,7 +819,7 @@ def main():
 
 
     # Saco a pasear un número "n" de hormigas
-    numero_de_hormigas = 20000
+    numero_de_hormigas = 1
     for n in range(1,numero_de_hormigas+1):
         print("Sale la hormiga: ",n," .............suerte!")
         paseo_hormiga1(win,horm,comi)
