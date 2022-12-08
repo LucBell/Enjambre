@@ -55,7 +55,18 @@ bordes = 25
 ##print(tamY)
 ##print(type(tamX))
 
-# Carga de la lista
+
+
+def carga_inicial_feromona():
+    # Programa que carga con ceros la lista feromona al inicio
+    
+    global feromona
+
+    for coordX in range(0,tamX):
+        for coordY in range(0,tamY):
+            feromona +=[0]
+    # print("Feromona inicial: ", feromona)
+
 
 def genera_el_entorno():
     
@@ -508,12 +519,16 @@ def paseo_hormiga1(win,horm,comi):
         else:
             # print("No me muevo y lo intento de nuevo")
             pass
-
+        
+        # Si la posición de la hormiga coincide con la posición de la comida
+        #   considero que ha encontrado la comida.
+        # La hormiga vuelve al hormiguero depositando la feromona.
         if pos_horm== comi:
             print("Encontré la comida!! En el intento: ", stamina)
             print("He necesitado los siguientes pasos: ", len(recorrido_hormiga))
             print("He recorrido: ",recorrido_hormiga)
 
+            dejar_feromona(recorrido_hormiga)
             pintar_camino(win, recorrido_hormiga)
 
             break
@@ -531,6 +546,16 @@ def paseo_hormiga1(win,horm,comi):
             print ("Intento ",stamina," y no encontré la comida...")
             break
 
+
+def dejar_feromona(recorrido_hormiga):
+    # Programa para cargar con feromona cuando una hormiga encuentra el hormiguero
+    global feromona
+
+    # Añado una cantidad de feromona en cada casilla
+    cantidad_feromona = 10
+    for casilla_camino in recorrido_hormiga:
+        feromona[casilla_camino]+=cantidad_feromona
+    
 
 def pintar_camino(win, recorrido_hormiga):
     # Con esta función quiero pintar el recorrido que ha seguido la hormiga.
@@ -679,6 +704,9 @@ def main():
 
     text_on_screen(win)
 
+    # Carga inicial feromona
+    carga_inicial_feromona()
+
     # Desactivo la carga para que siempre se cargue de fichero
     # Activar siguiente línea y desactivar la siguiente para que vuelva a preguntar
     # si queremos generar uno nuevo.
@@ -705,12 +733,14 @@ def main():
     paseo_hormiga1(win,horm,comi)
 
     # Saco a pasear un número "n" de hormigas
-    numero_de_hormigas = 20
+    numero_de_hormigas = 200
 
     for n in range(1,numero_de_hormigas+1):
         print("Sale la hormiga: ",n," .............suerte!")
         paseo_hormiga1(win,horm,comi)
     
+    print("Feromona final: ",feromona)
+
     pygame.display.update()
 
     # Antes de salir guardo en un fichero mi hormiguero
@@ -734,7 +764,7 @@ def main():
         
         # Esto es fundamental para que se vea bien lo que pinto.
         # pero no parece que haga falta que esté en el while... salvo que pinte cosas
-        # nuevas
+        # nuevas, aun pintando paredes nuevas, no parece hacer falta aquí.
         # pygame.display.update()
 
 

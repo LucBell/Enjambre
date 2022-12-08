@@ -4,7 +4,9 @@ Cosas que tengo que hacer en este programa
 1. Terminar de desarrollar las hormigas.
     1b. Que gestionen plazas.
     1c. Que gestionen rotondas.
-    1d. Crear variable feromona, utilizarla y que influya en las hormigas.
+    1e. Que la cantidad de feromona influya en las decisiones de las hormigas.
+    1f. Que la feromona se pierda con el tiempo.
+
 
 2. Desarrollar la generación de hormigas.
 
@@ -24,6 +26,7 @@ Cosas que tengo que hacer en este programa
         4e1. Un programa de generación aleatoria de laberintos que se almacenan en
             ficheros.
         4e2. Un programa de resolución de laberintos almacenados en ficheros.
+    4f. Fin del programa, elegir el camino más corto de los encontrados.
 
 
 ToDoS Cerrados:
@@ -32,3 +35,4 @@ ToDoS Cerrados:
 
 1. Terminar de desarrollar las hormigas.
     1a. Que tapen pasillos que acaban cerrados.
+    1d. Crear variable feromona, utilizarla.
