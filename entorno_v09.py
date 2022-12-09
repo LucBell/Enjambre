@@ -766,7 +766,7 @@ def obtener_entorno_de_fichero():
             
             # Borro los datos de la variable
             del def_casilla
-        # print(entorno)
+        print(entorno)
 
 def genera_entorno_aleatorio():
     # Programa gestor de las subrutinas de la creación aleatoria
@@ -775,6 +775,10 @@ def genera_entorno_aleatorio():
     homogeneiza_bordes()
     # libera_cuadrados() # No lo puedo activar hasta que arregle con el nuevo borde
     # eliminadorParejasVerticales() # No lo puedo activar hasta que arregle con el nuevo borde.
+
+    # Cuando genero un hormiguero, lo guardo por si quiero repetir
+    guardar_hormiguero()
+    print("Hormiguero guardado.")
 
 def carga_entorno():
     # Esto sirve para generar el hormiguero o cargar el que tenemos guardado
@@ -831,8 +835,8 @@ def main():
     # Activar siguiente línea y desactivar la siguiente para que vuelva a preguntar
     # si queremos generar uno nuevo.
     # carga_entorno() # Este si quiero que me pregunte
-    # obtener_entorno_de_fichero() # Este si quiero que lo tome de fichero
-    genera_entorno_aleatorio() # Este si quiero que lo genere aleatorio
+    obtener_entorno_de_fichero() # Este si quiero que lo tome de fichero
+    # genera_entorno_aleatorio() # Este si quiero que lo genere aleatorio
 
     # Defino dónde está el hormiguero y dónde la comida
     # Esto lo tengo que meter en un fichero para poder guardarlo
