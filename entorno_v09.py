@@ -9,6 +9,7 @@ os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0,0)
 import random # Para los números aleatorios
 import pygame
 import time
+import pickle
 
 # from pygame.locals import *
 
@@ -468,7 +469,8 @@ def paseo_hormiga1(win,horm,comi):
     # recorrido_hormiga += pos_horm
 
     # Creo un loop hasta que encuentre la comida
-    aguante_hormiga = 80
+    aguante_hormiga = 150
+
     for stamina in range(1,aguante_hormiga+1):
         # Decido hacia donde me muevo
         # Aquí habrá que poner probabilidades según las indicaciones
@@ -492,9 +494,9 @@ def paseo_hormiga1(win,horm,comi):
         if casilla[dir_objetivo+1] == 0:
 
             # Compruebo si es un callejón y tomo medidas
-            # mueve = comprueba_callejon(win, horm, casilla, pos_horm, dir_objetivo)
+            mueve = comprueba_callejon(win, horm, casilla, pos_horm, dir_objetivo)
             # Pongo este cuando quiero probar sin localizador de callejones
-            mueve = True
+            # mueve = True
 
             # Muevo si no ha habido problemas
             if mueve == True:
@@ -547,7 +549,7 @@ def paseo_hormiga1(win,horm,comi):
         
         # Si llego al final del loop sin haber encontrado nada pongo un mensaje
         if stamina == aguante_hormiga:
-            print ("Intento ",stamina," y no encontré la comida...")
+            # print ("Intento ",stamina," y no encontré la comida...")
 
             # Actualizo el intento como fracaso
             fracasos+= 1
@@ -555,7 +557,7 @@ def paseo_hormiga1(win,horm,comi):
             break
         # Compruebo si he entrado en una plaza y levanto muro
         # desactivar para probar sin esta mejora
-        # comprueba_plaza(win,casilla,pos_horm,dir_objetivo)
+        comprueba_plaza(win,casilla,pos_horm,dir_objetivo)
 
 
 def comprueba_plaza(win,casilla,pos_horm,dir_objetivo):
@@ -721,53 +723,24 @@ def text_on_screen(win):
 
 def guardar_hormiguero():
     # Función para guardar el entorno en un fichero
+    # Prueba de almacenamiento como binario de forma global
+    #   utilizando el programa pickle
 
     global entorno
 
-    with open("Datos/DatosEntorno.txt",'w',encoding = 'utf-8') as f:
-        for casillas in entorno:
-            for datos in casillas:
-                f.write(str(datos))
-            # f.write("-")
+    with open("Datos/DatosEntorno.txt", 'wb') as fp:
+        pickle.dump(entorno, fp)
+        print('Done writing list into a binary file')
 
 def obtener_entorno_de_fichero():
     # Función para cargar el entorno de un fichero en vez de generarlo cada vez.
-
+    #   utilizo la función pickle que es muy eficiente
+    #   utilizo read binary "rb"
     global entorno
 
-    with open("Datos/DatosEntorno.txt",'r',encoding = 'utf-8') as f:
-        # Saco el tamaño del entorno
-        file_stat= os.stat("Datos/DatosEntorno.txt")
-        file_size = file_stat.st_size
-
-        # Calculo cuantas casillas tiene el fichero
-
-        numero_casillas = int(file_size/6)
-
-        #print("Número de casillas= ", numero_casillas)
-
-        # Saco los datos de cada casilla y lo meto en el entorno
-
-        for casilla in range(numero_casillas):
-            # Defino una lista para cada casilla
-            def_casilla = []
-
-            # Relleno la lista de la casilla con sus datos
-            for coord in range (6):
-                # print("Coord: ",coord)
-                dato = f.read(1)
-                #print("Dato: ",dato)
-                dato_num = int(dato)
-                def_casilla += [dato_num]
-            #print("Def_casilla: ",def_casilla)
-            
-            # Meto toda la casilla en la variable entorno
-            entorno += [def_casilla]
-            
-            # Borro los datos de la variable
-            del def_casilla
-        print(entorno)
-
+    with open("Datos/DatosEntorno.txt", 'rb') as fp:
+        entorno = pickle.load(fp)
+    
 def genera_entorno_aleatorio():
     # Programa gestor de las subrutinas de la creación aleatoria
     # Esto me lo debería llevar a otro fichero para aligerar este
@@ -848,9 +821,9 @@ def main():
 
 
     # Saco a pasear un número "n" de hormigas
-    numero_de_hormigas = 1
+    numero_de_hormigas = 20000
     for n in range(1,numero_de_hormigas+1):
-        print("Sale la hormiga: ",n," .............suerte!")
+        # print("Sale la hormiga: ",n," .............suerte!")
         paseo_hormiga1(win,horm,comi)
     
     print("Feromona final: ",feromona)

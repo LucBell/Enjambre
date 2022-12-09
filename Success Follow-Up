@@ -10,3 +10,8 @@ Fichero para tener los datos de éxito con diferentes estrategias
     a. Básico: Exitos = 36%
     b. Con cerrado de callejones: Exitos = 40% + 4%
     c. Con cerrado de plazas: Éxitos = 44% + 4%
+
+3. DatosEntorno 10x10 std 5 plazas - horm: 16 - comida 10 - Aguante 150 - 20.000 hormigas
+    a. Básico: Exitos = 5%
+    b. Con cerrado de callejones: Exitos = 7% + 2%
+    c. Con cerrado de plazas: Éxitos = 4% - 3%
