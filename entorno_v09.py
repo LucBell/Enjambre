@@ -71,9 +71,10 @@ def carga_inicial_feromona():
     
     global feromona
 
+    feromona_inicial = 50
     for coordX in range(0,tamX):
         for coordY in range(0,tamY):
-            feromona +=[1]
+            feromona +=[feromona_inicial]
     # print("Feromona inicial: ", feromona)
 
 
@@ -469,7 +470,7 @@ def paseo_hormiga1(win,horm,comi):
     # recorrido_hormiga += pos_horm
 
     # Creo un loop hasta que encuentre la comida
-    aguante_hormiga = 150
+    aguante_hormiga = 25
 
     for stamina in range(1,aguante_hormiga+1):
         # Decido hacia donde me muevo
@@ -483,12 +484,37 @@ def paseo_hormiga1(win,horm,comi):
         casilla = entorno[pos_horm]
         
         # Calculo la probabilidad que tiene cada lado de ser el destino de la hormiga
-        # Esto lo dejo en stand-by hasta que haya solucionado el problema de los bordes.
-        # prob_de_1 = feromona[pos_horm+direcciones[1-1]]*casilla[1+1]
-        # prob_de_2 = feromona[pos_horm+direcciones[2-1]]*casilla[2+1]
-        # prob_de_3 = feromona[pos_horm+direcciones[3-1]]*casilla[3+1]
-        # prob_de_4 = feromona[pos_horm+direcciones[4-1]]*casilla[4+1]
-        # print("Casilla: ",casilla," Probabilidades: ",prob_de_1,prob_de_2,prob_de_3,prob_de_4)
+        # Primero cargo la variable muro con cero si hay muro (lo contrario que he
+        # hecho en la variable entorno...)        
+        if casilla[1+1] == 0: muro_1 = 1
+        else: muro_1 = 0
+        if casilla[2+1] == 0: muro_2 = 1
+        else: muro_2 = 0
+        if casilla[3+1] == 0: muro_3 = 1
+        else: muro_3 = 0
+        if casilla[4+1] == 0: muro_4 = 1
+        else: muro_4 = 0
+        # Aquí calculo la probabilidad de cada dirección.
+        #   como multiplico la feromona por el muro. Si hay muro la probabilidad es 0
+        prob_de_1 = feromona[pos_horm+direcciones[1-1]]*muro_1
+        prob_de_2 = feromona[pos_horm+direcciones[2-1]]*muro_2
+        prob_de_3 = feromona[pos_horm+direcciones[3-1]]*muro_3
+        prob_de_4 = feromona[pos_horm+direcciones[4-1]]*muro_4
+        # Calculo el número total de probabilidad y calculo un número en el rango
+        prob_total = prob_de_1+prob_de_2+prob_de_3+prob_de_4
+        dir_random = random.randint(0, prob_total)
+        # Calculo los rangos para ver a quién le ha tocado
+        prob_acu_2 = prob_de_1+prob_de_2
+        prob_acu_3 = prob_acu_2+prob_de_3
+        # pregunto a ver en qué intervalo ha caído
+        if dir_random < prob_de_1: dir_objetivo = 1
+        elif dir_random < prob_acu_2: dir_objetivo = 2
+        elif dir_random < prob_acu_3: dir_objetivo = 3
+        else: dir_objetivo = 4
+
+        # print("Casilla: ",casilla," Probabilidades: ",prob_de_1,prob_acu_2,prob_acu_3,prob_total)
+        # print("Dir random: ", dir_random)
+        # print("Dir Objetivo: ", dir_objetivo)
 
 
         if casilla[dir_objetivo+1] == 0:
@@ -651,7 +677,7 @@ def dejar_feromona(recorrido_hormiga):
     global feromona
 
     # Añado una cantidad de feromona en cada casilla
-    cantidad_feromona = 10
+    cantidad_feromona = 1
     for casilla_camino in recorrido_hormiga:
         feromona[casilla_camino]+=cantidad_feromona
     
@@ -865,3 +891,29 @@ pygame.quit()
 
 # --------------------------------------------------------------
 
+# Programas auxiliares
+
+def modificar_laberinto():
+    # Programa para modificar el laberinto, porque al tener el fichero
+    #   en binario ya no puedo manualmente
+
+    global entorno
+
+    # Primero cargo el laberinto
+    obtener_entorno_de_fichero()
+
+    # Digo las celdas que quiero cambiar
+    casilla_ppal = entorno[93]
+    casilla_opuesta = entorno[94]
+    print("Casillas Antes: ", casilla_ppal, casilla_opuesta)
+    casilla_ppal[2+1] = 0
+    casilla_opuesta[4+1] = 0
+    print("Casillas Después: ", casilla_ppal, casilla_opuesta)
+
+    # Grabo de nuevo el laberinto
+    guardar_hormiguero()
+
+
+
+# modificar_laberinto()
+# pygame.quit()
