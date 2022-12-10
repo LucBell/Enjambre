@@ -2,7 +2,7 @@ TO DOs
 Cosas que tengo que hacer en este programa
 
 1. Terminar de desarrollar las hormigas.
-    1c. Que gestionen rotondas.
+    1c. Que gestionen rotondas de 6 casillas.
     1f. Que la feromona se pierda con el tiempo.
     1h. Dar preferencia a que no den la vuelta, que siempre intenten ir hacia delante.
     1i. Pintar de un color distinto los muros originales de los levantados.
