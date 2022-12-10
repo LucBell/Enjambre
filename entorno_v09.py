@@ -53,10 +53,11 @@ bordY = 20
 # tamY = int(input("Tamaño Vertical 96? "))
 # bordes = int(input("Porcentaje de bordes (1-100) 25?"))
 
-# Fijo el Tamaño para test
+# Fijo el Tamaño para test de las variables principales
 tamX = 11
 tamY = 11
 bordes = 25
+feromona_inicial = 10
 
 ##print(tamX)
 ##print(tamY)
@@ -69,9 +70,8 @@ direcciones = [-tamY,1,tamY,-1]
 def carga_inicial_feromona():
     # Programa que carga con ceros la lista feromona al inicio
     
-    global feromona
+    global feromona, feromona_inicial
 
-    feromona_inicial = 50
     for coordX in range(0,tamX):
         for coordY in range(0,tamY):
             feromona +=[feromona_inicial]
@@ -413,7 +413,11 @@ def pinto_cuadro (win, color, casilla):
 
 
 def hormiguero(win):
-    # Selecciono origen hormiguero aleatorio
+    # Programa para situar el hormiguero
+
+    global horm
+
+    # Selecciono origen hormiguero aleatorio (tengo que cambiar por el tema de los bordes)
     # horm = random.randint(0,len(entorno)-1)
 
     # Fijo el hormiguero en un punto fijo
@@ -429,7 +433,11 @@ def hormiguero(win):
     return horm
 
 def comida(win):
-    # Selecciono origen hormiguero aleatorio
+    # Programa para situar la comida
+
+    global comi
+
+    # Selecciono origen hormiguero aleatorio (tengo que cambiar por el tema de los bordes)
     # comi = random.randint(0,len(entorno)-1)
 
     # Fijo el hormiguero en un punto fijo
@@ -438,7 +446,7 @@ def comida(win):
     # print ("Comida en: ",comi)
     # print (entorno[comi])
     
-    color_comida = (41, 158, 41)
+    color_comida = (91, 155, 213)
 
     pinto_cuadro(win, color_comida, comi)
 
@@ -687,13 +695,45 @@ def pintar_camino(win, recorrido_hormiga):
 
     # Utilizo la función range para omitir el primer y último paso, para no pintar
     #   encima del hormiguero o la comida.
-    for celda_a_pintar in range (1,len(recorrido_hormiga)-1):
-        
-        paso_hormiga = recorrido_hormiga[celda_a_pintar]
-                
-        color_camino = (236, 250, 230)
 
-        pinto_cuadro(win, color_camino, paso_hormiga)
+        global feromona, feromona_inicial, horm, comi
+
+        color_max = max(feromona)
+        color_camino1 = (236, 250, 230)
+        color_camino2 = (198, 224, 180)
+        color_camino3 = (169, 208, 142)
+        color_camino4 = (112, 173,  71)
+
+        for celda_a_pintar in range (0,len(feromona)):
+            if feromona[celda_a_pintar]== feromona_inicial or celda_a_pintar == horm or celda_a_pintar==comi:
+                pass
+            elif feromona[celda_a_pintar]<color_max*1/4:
+                color_camino = color_camino1
+                pinto_cuadro(win, color_camino, celda_a_pintar)
+            elif feromona[celda_a_pintar]<color_max*2/4:
+                color_camino = color_camino2
+                pinto_cuadro(win, color_camino, celda_a_pintar)
+            elif feromona[celda_a_pintar]<color_max*3/4:
+                color_camino = color_camino3
+                pinto_cuadro(win, color_camino, celda_a_pintar)
+            else:
+                color_camino = color_camino4
+                pinto_cuadro(win, color_camino, celda_a_pintar)
+        
+        # paso_hormiga = recorrido_hormiga[celda_a_pintar]
+
+        # pinto_cuadro(win, color_camino, celda_a_pintar)
+
+    # for celda_a_pintar in range (1,len(recorrido_hormiga)-1):
+        
+    #     paso_hormiga = recorrido_hormiga[celda_a_pintar]
+                
+    #     color_camino1 = (236, 250, 230)
+    #     color_camino2 = (198, 224, 180)
+    #     color_camino3 = (169, 208, 142)
+    #     color_camino4 = (112, 173,  71)
+
+    #     pinto_cuadro(win, color_camino, paso_hormiga)
 
 
 def text_on_screen(win):
