@@ -2,24 +2,18 @@ TO DOs
 Cosas que tengo que hacer en este programa
 
 1. Terminar de desarrollar las hormigas.
-    1b. Que gestionen plazas.
     1c. Que gestionen rotondas.
-    1e. Que la cantidad de feromona influya en las decisiones de las hormigas.
     1f. Que la feromona se pierda con el tiempo.
-    1g. Pintar los caminos en distinto color en función de la cantidad de feromona.
-
+    1h. Dar preferencia a que no den la vuelta, que siempre intenten ir hacia delante.
+    1i. Pintar de un color distinto los muros originales de los levantados.
 
 2. Desarrollar la generación de hormigas.
-
 
 3. Display.
     3a. Aprender a poner botones y un menú del juego sin tener que pasar por la consola.
 
-
 4. Otros
     4a. Guardar la posición de hormiguero y comida.
-    4b. Independizar de los programas el dibujo de cuadrados.
-        Poner todo ese código en un programa aparte.
     4c. Simplificar toda la parte original de dibujo del laberinto.
         Lo hice complicado para ser rápido pero en Phyton no tiene sentido.
     4d. Pensar si desarrollo la apertura de zonas cerradas del laberinto.
@@ -28,9 +22,7 @@ Cosas que tengo que hacer en este programa
             ficheros.
         4e2. Un programa de resolución de laberintos almacenados en ficheros.
     4f. Fin del programa, elegir el camino más corto de los encontrados.
-    4g. He comenzado a cambiar el hormiguero para dejar una fila de datos por fuera, pero afecta a muchas cosas y no creo haberlo arreglado todo.
-        He empezado en la versión 09, pero no sé si seguir por ahí...
-
+    4h. Calcular el tiempo de generación de laberinto y de hormigueo.
 
 ToDoS Cerrados:
 
@@ -39,3 +31,13 @@ ToDoS Cerrados:
 1. Terminar de desarrollar las hormigas.
     1a. Que tapen pasillos que acaban cerrados.
     1d. Crear variable feromona, utilizarla.
+
+10/12/2022
+
+1. Terminar de desarrollar las hormigas.
+    1b. Que gestionen plazas.
+    1e. Que la cantidad de feromona influya en las decisiones de las hormigas.
+    1g. Pintar los caminos en distinto color en función de la cantidad de feromona.
+4. Otros
+    4g. He comenzado a cambiar el hormiguero para dejar una fila de datos por fuera, pero afecta a muchas cosas y no creo haberlo arreglado todo.
+        He empezado en la versión 09, pero no sé si seguir por ahí...

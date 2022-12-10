@@ -54,8 +54,8 @@ bordY = 20
 # bordes = int(input("Porcentaje de bordes (1-100) 25?"))
 
 # Fijo el Tamaño para test de las variables principales
-tamX = 11
-tamY = 11
+tamX = 20
+tamY = 20
 bordes = 25
 feromona_inicial = 10
 
@@ -478,7 +478,7 @@ def paseo_hormiga1(win,horm,comi):
     # recorrido_hormiga += pos_horm
 
     # Creo un loop hasta que encuentre la comida
-    aguante_hormiga = 25
+    aguante_hormiga = (tamX+tamY)*6
 
     for stamina in range(1,aguante_hormiga+1):
         # Decido hacia donde me muevo
@@ -698,7 +698,7 @@ def pintar_camino(win, recorrido_hormiga):
 
         global feromona, feromona_inicial, horm, comi
 
-        color_max = max(feromona)
+        color_max = max(feromona)-feromona_inicial
         color_camino1 = (236, 250, 230)
         color_camino2 = (198, 224, 180)
         color_camino3 = (169, 208, 142)
@@ -707,13 +707,13 @@ def pintar_camino(win, recorrido_hormiga):
         for celda_a_pintar in range (0,len(feromona)):
             if feromona[celda_a_pintar]== feromona_inicial or celda_a_pintar == horm or celda_a_pintar==comi:
                 pass
-            elif feromona[celda_a_pintar]<color_max*1/4:
+            elif feromona[celda_a_pintar]<color_max*1/4+feromona_inicial:
                 color_camino = color_camino1
                 pinto_cuadro(win, color_camino, celda_a_pintar)
-            elif feromona[celda_a_pintar]<color_max*2/4:
+            elif feromona[celda_a_pintar]<color_max*2/4+feromona_inicial:
                 color_camino = color_camino2
                 pinto_cuadro(win, color_camino, celda_a_pintar)
-            elif feromona[celda_a_pintar]<color_max*3/4:
+            elif feromona[celda_a_pintar]<color_max*3/4+feromona_inicial:
                 color_camino = color_camino3
                 pinto_cuadro(win, color_camino, celda_a_pintar)
             else:
@@ -874,8 +874,8 @@ def main():
     # Activar siguiente línea y desactivar la siguiente para que vuelva a preguntar
     # si queremos generar uno nuevo.
     # carga_entorno() # Este si quiero que me pregunte
-    obtener_entorno_de_fichero() # Este si quiero que lo tome de fichero
-    # genera_entorno_aleatorio() # Este si quiero que lo genere aleatorio
+    # obtener_entorno_de_fichero() # Este si quiero que lo tome de fichero
+    genera_entorno_aleatorio() # Este si quiero que lo genere aleatorio
 
     # Defino dónde está el hormiguero y dónde la comida
     # Esto lo tengo que meter en un fichero para poder guardarlo
@@ -887,12 +887,13 @@ def main():
 
 
     # Saco a pasear un número "n" de hormigas
-    numero_de_hormigas = 20000
+    # numero_de_hormigas = tamX*tamY*20
+    numero_de_hormigas = 1
     for n in range(1,numero_de_hormigas+1):
         # print("Sale la hormiga: ",n," .............suerte!")
         paseo_hormiga1(win,horm,comi)
     
-    print("Feromona final: ",feromona)
+    # print("Feromona final: ",feromona)
 
     # Programa que me dice cómo lo estoy haciendo para comparar estrategias
     recuento_de_exitos()
@@ -903,7 +904,7 @@ def main():
     # Antes de salir guardo en un fichero mi hormiguero
     # print("Este es el entorno que estás utilizando: ",entorno)
     # Desactivo la grabación del hormiguero para que no se guarden los cambios que hago en el mismo.
-    # guardar_hormiguero()
+    guardar_hormiguero()
     # print("Hormiguero guardado.")
 
     # Ejemplo de como mantener un programa corriendo hasta que cambias una variable.
