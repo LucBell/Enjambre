@@ -54,8 +54,8 @@ bordY = 20
 # bordes = int(input("Porcentaje de bordes (1-100) 25?"))
 
 # Fijo el Tamaño para test de las variables principales
-tamX = 20
-tamY = 20
+tamX = 40
+tamY = 40
 bordes = 25
 feromona_inicial = 10
 
@@ -877,6 +877,13 @@ def main():
     # obtener_entorno_de_fichero() # Este si quiero que lo tome de fichero
     genera_entorno_aleatorio() # Este si quiero que lo genere aleatorio
 
+    # Antes de salir guardo en un fichero mi hormiguero
+    # print("Este es el entorno que estás utilizando: ",entorno)
+    # Desactivo la grabación del hormiguero para que no se guarden los cambios que hago en el mismo.
+    guardar_hormiguero()
+    # print("Hormiguero guardado.")
+
+
     # Defino dónde está el hormiguero y dónde la comida
     # Esto lo tengo que meter en un fichero para poder guardarlo
     horm = hormiguero(win)
@@ -885,13 +892,16 @@ def main():
     # Pinto el hormiguero
     pintar_hormiguero(bordX,bordY,win)
 
+    # Esto es necesario para que se vea lo que pinto
+    pygame.display.update()
 
     # Saco a pasear un número "n" de hormigas
-    # numero_de_hormigas = tamX*tamY*20
-    numero_de_hormigas = 1
+    numero_de_hormigas = tamX*tamY*10
+    # numero_de_hormigas = 1
     for n in range(1,numero_de_hormigas+1):
         # print("Sale la hormiga: ",n," .............suerte!")
         paseo_hormiga1(win,horm,comi)
+        pygame.display.update()
     
     # print("Feromona final: ",feromona)
 
@@ -901,11 +911,7 @@ def main():
     # Esto es necesario para que se vea lo que pinto
     pygame.display.update()
 
-    # Antes de salir guardo en un fichero mi hormiguero
-    # print("Este es el entorno que estás utilizando: ",entorno)
-    # Desactivo la grabación del hormiguero para que no se guarden los cambios que hago en el mismo.
-    guardar_hormiguero()
-    # print("Hormiguero guardado.")
+
 
     # Ejemplo de como mantener un programa corriendo hasta que cambias una variable.
     # Paso 1. Defines la variable
