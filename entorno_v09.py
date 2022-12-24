@@ -874,13 +874,13 @@ def main():
     # Activar siguiente línea y desactivar la siguiente para que vuelva a preguntar
     # si queremos generar uno nuevo.
     # carga_entorno() # Este si quiero que me pregunte
-    # obtener_entorno_de_fichero() # Este si quiero que lo tome de fichero
-    genera_entorno_aleatorio() # Este si quiero que lo genere aleatorio
+    obtener_entorno_de_fichero() # Este si quiero que lo tome de fichero
+    # genera_entorno_aleatorio() # Este si quiero que lo genere aleatorio
 
     # Antes de salir guardo en un fichero mi hormiguero
     # print("Este es el entorno que estás utilizando: ",entorno)
     # Desactivo la grabación del hormiguero para que no se guarden los cambios que hago en el mismo.
-    guardar_hormiguero()
+    # guardar_hormiguero()
     # print("Hormiguero guardado.")
 
 
