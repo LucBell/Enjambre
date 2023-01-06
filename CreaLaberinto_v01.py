@@ -44,14 +44,6 @@ tamX = 20 # tamaño eje X del laberinto
 tamY = 10  # tamaño eje Y del laberinto
 bordes = 25
 
-##print(tamX)
-##print(tamY)
-##print(type(tamX))
-
-# Almaceno en una lista cómo varía el indicador de posición según
-# en qué dirección se mueva la hormiga
-direcciones = [-tamY,1,tamY,-1]
-
 def genera_el_entorno():
     # Con esta función creamos los bordes aleatorios y los cargamos en la variable entorno
 
