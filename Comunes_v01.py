@@ -9,17 +9,17 @@ def com_pintar_hormiguero(origenX,origenY,win):
    
     for casilla in range(0, tamY):
         casillaCheck = entorno[casilla]
-        pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
+        com_pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
 
         casillaCheck = entorno[casilla+tamY*(tamX-1)]
-        pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
+        com_pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
 
     for casilla in range(0, tamX-1):
         casillaCheck = entorno[tamY+casilla*tamY]
-        pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
+        com_pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
 
         casillaCheck = entorno[tamY*2-1+casilla*tamY]
-        pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
+        com_pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
 
 # Luego el interior alternando celdas
 
@@ -33,9 +33,9 @@ def com_pintar_hormiguero(origenX,origenY,win):
             casillaCheck = entorno[tamY+1+columna*tamY+fila*2+tieneQueSerImpar]
             ## print(columna, fila,casillaCheck,tieneQueSerImpar)
 
-            pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
+            com_pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
 
-def pintar_bordes_casilla(origenX,origenY,casillaCheck,win):
+def com_pintar_bordes_casilla(origenX,origenY,casillaCheck,win):
     # Programa para pintar los bordes de una casilla determinada
     # Defino el tamaño de las casillas y el origen de cada una
     # 10 para tamaño pequeño
@@ -62,7 +62,7 @@ def pintar_bordes_casilla(origenX,origenY,casillaCheck,win):
         pygame.draw.line(win, (0, 0, 0), (posX+tc, posY), (posX, posY), 3)
 
 
-def pinto_cuadro (win, color, casilla):
+def com_pinto_cuadro (win, color, casilla):
 
     # Programa para pintar cuadros en el hormiguero
 
@@ -85,7 +85,7 @@ def pinto_cuadro (win, color, casilla):
     pygame.draw.rect(win, color, (coord_X*tc+bordX+bordeblanco,coord_Y*tc+bordY+bordeblanco, tc-bordeblanco*2, tc-bordeblanco*2), 0)
 
 
-def hormiguero(win):
+def com_hormiguero(win,tamY):
     # Programa para situar el hormiguero
 
     global horm
@@ -101,11 +101,11 @@ def hormiguero(win):
     
     color_hormiguero = (201, 135, 58)
 
-    pinto_cuadro(win, color_hormiguero, horm)
+    com_pinto_cuadro(win, color_hormiguero, horm)
 
     return horm
 
-def comida(win):
+def com_comida(win,tamY):
     # Programa para situar la comida
 
     global comi
@@ -121,13 +121,13 @@ def comida(win):
     
     color_comida = (91, 155, 213)
 
-    pinto_cuadro(win, color_comida, comi)
+    com_pinto_cuadro(win, color_comida, comi)
 
     return comi
 
 
 
-def text_on_screen(win):
+def com_text_on_screen(win):
 
     
 
@@ -179,7 +179,7 @@ def text_on_screen(win):
     #     pygame.display.update()
 
 
-def obtener_entorno_de_fichero():
+def com_obtener_entorno_de_fichero():
     # Función para cargar el entorno de un fichero en vez de generarlo cada vez.
     #   utilizo la función pickle que es muy eficiente
     #   utilizo read binary "rb"

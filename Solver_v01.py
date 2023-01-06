@@ -11,7 +11,8 @@ import pygame
 import time
 import pickle
 
-# from pygame.locals import *
+# Carga los otros programas
+from Comunes_v01 import *
 
 # Inicializa pygame
 
@@ -457,7 +458,7 @@ def pintar_camino(win, recorrido_hormiga):
                 pinto_cuadro(win, color_camino, celda_a_pintar)
             else:
                 color_camino = color_camino4
-                pinto_cuadro(win, color_camino, celda_a_pintar)
+                com_pinto_cuadro(win, color_camino, celda_a_pintar)
         
         # paso_hormiga = recorrido_hormiga[celda_a_pintar]
 
@@ -526,52 +527,15 @@ def text_on_screen(win):
     #         pygame.draw.rect(win, 0, cursor3)
     #     pygame.display.update()
 
-def guardar_hormiguero():
-    # Función para guardar el entorno en un fichero
-    # Prueba de almacenamiento como binario de forma global
-    #   utilizando el programa pickle
-
-    global entorno
-
-    with open("Datos/DatosEntorno.txt", 'wb') as fp:
-        pickle.dump(entorno, fp)
-        print('Done writing list into a binary file')
-
 def obtener_entorno_de_fichero():
     # Función para cargar el entorno de un fichero en vez de generarlo cada vez.
     #   utilizo la función pickle que es muy eficiente
     #   utilizo read binary "rb"
     global entorno
 
-    with open("Datos/DatosEntorno.txt", 'rb') as fp:
+    with open("Datos/DatosEntorno"+str(tamX)+"x"+str(tamY)+".txt", 'rb') as fp:
         entorno = pickle.load(fp)
     
-def genera_entorno_aleatorio():
-    # Programa gestor de las subrutinas de la creación aleatoria
-    # Esto me lo debería llevar a otro fichero para aligerar este
-    genera_el_entorno()
-    homogeneiza_bordes()
-    # libera_cuadrados() # No lo puedo activar hasta que arregle con el nuevo borde
-    # eliminadorParejasVerticales() # No lo puedo activar hasta que arregle con el nuevo borde.
-
-    # Cuando genero un hormiguero, lo guardo por si quiero repetir
-    guardar_hormiguero()
-    print("Hormiguero guardado.")
-
-def carga_entorno():
-    # Esto sirve para generar el hormiguero o cargar el que tenemos guardado
-    
-    respuesta = input("Genero nuevo el entorno (s/n): ") 
-    if respuesta == "s":
-        genera_entorno_aleatorio()
-         
-    elif respuesta == "n":
-        obtener_entorno_de_fichero()
-         
-    else: 
-        print("Por favor solo respuestas s/n...")
-        pygame.quit()
-
 def recuento_de_exitos():
     # Programa para hacer el recuento de exitos y almacenarlos
 
@@ -609,27 +573,16 @@ def main():
     # Carga inicial feromona
     carga_inicial_feromona()
 
-    # Desactivo la carga para que siempre se cargue de fichero
-    # Activar siguiente línea y desactivar la siguiente para que vuelva a preguntar
-    # si queremos generar uno nuevo.
-    # carga_entorno() # Este si quiero que me pregunte
+    # Carga laberinto
     obtener_entorno_de_fichero() # Este si quiero que lo tome de fichero
-    # genera_entorno_aleatorio() # Este si quiero que lo genere aleatorio
-
-    # Antes de salir guardo en un fichero mi hormiguero
-    # print("Este es el entorno que estás utilizando: ",entorno)
-    # Desactivo la grabación del hormiguero para que no se guarden los cambios que hago en el mismo.
-    # guardar_hormiguero()
-    # print("Hormiguero guardado.")
-
 
     # Defino dónde está el hormiguero y dónde la comida
     # Esto lo tengo que meter en un fichero para poder guardarlo
-    horm = hormiguero(win)
-    comi = comida(win)
+    horm = com_hormiguero(win,tamY)
+    comi = com_comida(win,tamY)
 
     # Pinto el hormiguero
-    pintar_hormiguero(bordX,bordY,win)
+    com_pintar_hormiguero(bordX,bordY,win)
 
     # Esto es necesario para que se vea lo que pinto
     pygame.display.update()
