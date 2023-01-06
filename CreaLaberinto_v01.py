@@ -19,9 +19,7 @@ pygame.font.init()
 
 # Declaraciones variables principales
 
-# Variable Entorno y feromona son listas
-
-
+# Variable Entorno es lista
 entorno = []
 
 # Tamaño Display
@@ -456,6 +454,28 @@ def genera_entorno_aleatorio():
     guardar_hormiguero()
     print("Hormiguero guardado.")
 
+def inicio(win):
+    # Programa que inicia los pasos de generación del laberinto
+
+    global entorno
+    entorno = []
+
+    # borro lo que hay pintado
+    longX = dispX-bordX
+    longY = dispY-bordY
+    fondoHormiguero = pygame.Surface((longX,longY))
+    fondoHormiguero.fill((221,221,221))
+    win.blit(fondoHormiguero,(bordX,bordY))
+
+    # genero el hormiguero
+    genera_entorno_aleatorio()
+
+    # Pinto el hormiguero
+    pintar_hormiguero(bordX,bordY,win)
+
+    # Esto es necesario para que se vea lo que pinto
+    pygame.display.update()
+
 
 def main():
     # Este es el programa principal de Ejecución
@@ -482,15 +502,15 @@ def main():
     # si queremos generar uno nuevo.
     # carga_entorno() # Este si quiero que me pregunte
     # obtener_entorno_de_fichero() # Este si quiero que lo tome de fichero
-    genera_entorno_aleatorio() # Este si quiero que lo genere aleatorio
+    # genera_entorno_aleatorio() # Este si quiero que lo genere aleatorio
 
     # Pinto el hormiguero
-    pintar_hormiguero(bordX,bordY,win)
+    # pintar_hormiguero(bordX,bordY,win)
 
     # Esto es necesario para que se vea lo que pinto
-    pygame.display.update()
+    # pygame.display.update()
 
-
+    inicio(win)
 
     # Ejemplo de como mantener un programa corriendo hasta que cambias una variable.
     # Paso 1. Defines la variable
@@ -505,7 +525,7 @@ def main():
                 x_mouse, y_mouse = pygame.mouse.get_pos()
                 if 20 <= x_mouse <= 120 and 160 <= y_mouse <= 185:
                     # este lo guardo para otros botones
-                    pygame.display.update()
+                    inicio(win)
                 elif 20 <= x_mouse <= 120 and 120 <= y_mouse <= 145:
                     run = False
         # si actualizo datos, puedos pintarlos en este loop
