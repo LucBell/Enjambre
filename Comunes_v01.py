@@ -1,3 +1,29 @@
+# Fichero con todas las variables comunes y todos los módulos comunes.
+
+# Variables comunes-------------------------------------
+
+# Tamaño Display
+dispX = 1900
+dispY = 1010
+
+# Tamaño Bordes. Esto define el borde superior y el izquierdo
+# para ver dónde pinta el hormiguero
+bordX = 200
+bordY = 20
+
+# Fijo el Tamaño para test de las variables principales
+tamX = 20
+tamY = 10
+bordes = 25
+
+# Calculo el tamaño de las casillas para que no se salgan de la pantalla
+tcX = (dispX-(bordX+bordY))/tamX
+tcY = (dispY-(bordY*2))/tamY
+tc = min (tcX, tcY)
+
+
+
+# Módulos comunes---------------------------------------
 
 def com_pintar_hormiguero(bordX,bordY,win,entorno,dispX,dispY,tamX,tamY,tc):
 # Utilizando pygame defino una función para pintar el entorno

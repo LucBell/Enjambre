@@ -23,15 +23,6 @@ pygame.font.init()
 # Variable Entorno es lista
 entorno = []
 
-# Tamaño Display
-dispX = 1900
-dispY = 1010
-
-# Tamaño Bordes. Esto define el borde superior y el izquierdo
-# para ver dónde pinta el hormiguero
-bordX = 200
-bordY = 20
-
 # Longitud de la lista
 # print("Longitud Lista: ",len(entorno))
 
@@ -39,16 +30,6 @@ bordY = 20
 # tamX = int(input("Tamaño Horizontal 156? "))
 # tamY = int(input("Tamaño Vertical 96? "))
 # bordes = int(input("Porcentaje de bordes (1-100) 25?"))
-
-# Fijo el Tamaño para test de las variables principales
-tamX = 20 # tamaño eje X del laberinto
-tamY = 10  # tamaño eje Y del laberinto
-bordes = 25
-
-# Calculo el tamaño de las casillas para que no se salgan de la pantalla
-tcX = (dispX-(bordX+bordY))/tamX
-tcY = (dispY-(bordY*2))/tamY
-tc = min (tcX, tcY)
 
 
 def genera_el_entorno():

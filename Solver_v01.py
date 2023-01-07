@@ -35,19 +35,7 @@ recorrido_corto_num = 0
 recorrido_corto = []
 track_success = [exitos,fracasos,total_intentos,exitos_porc,fracasos_porc,recorrido_corto_num,recorrido_corto]
 
-# Tamaño Display
-dispX = 1900
-dispY = 1010
-
-# Tamaño Bordes. Esto define el borde superior y el izquierdo
-# para ver dónde pinta el hormiguero
-bordX = 200
-bordY = 20
-
 # Fijo el Tamaño para test de las variables principales
-tamX = 20
-tamY = 10
-bordes = 25
 feromona_inicial = 10
 
 # Saco a pasear un número "n" de hormigas
@@ -56,11 +44,6 @@ aguante_hormiga = (tamX+tamY)*6
 numero_de_hormigas = tamX*tamY*10
 # numero_de_hormigas = 1
 pausa_hormigas = 3
-
-# Calculo el tamaño de las casillas para que no se salgan de la pantalla
-tcX = (dispX-(bordX+bordY))/tamX
-tcY = (dispY-(bordY*2))/tamY
-tc = min (tcX, tcY)
 
 # Almaceno en una lista cómo varía el indicador de posición según
 # en qué dirección se mueva la hormiga
@@ -96,18 +79,12 @@ def paseo_hormiga1(win,horm,comi):
     # Textos para ayudarme a analizar el código
     # print("Posición inicial: ",horm, casilla)
     # print("Objetivo: ",comi, entorno[comi])
-
     # recorrido_hormiga += pos_horm
 
     # Creo un loop hasta que encuentre la comida
     for stamina in range(1,aguante_hormiga+1):
         # Decido hacia donde me muevo
-        # Aquí habrá que poner probabilidades según las indicaciones
-        # de las casillas adyacentes
         # print ("Intento número: ", stamina)
-        dir_objetivo = random.randint(1, 4)
-        # print ("Dirección: ", dir_objetivo)
-        # Compruebo si hay barrera
 
         casilla = entorno[pos_horm]
         
@@ -144,7 +121,8 @@ def paseo_hormiga1(win,horm,comi):
         # print("Dir random: ", dir_random)
         # print("Dir Objetivo: ", dir_objetivo)
 
-
+        # Compruebo que no haya un muro (esto lo debería poder quitar si he hecho
+        #   bien el cálculo de las probabilidades)
         if casilla[dir_objetivo+1] == 0:
 
             # Compruebo si es un callejón y tomo medidas
@@ -176,7 +154,7 @@ def paseo_hormiga1(win,horm,comi):
             # print ("He recorrido: ", recorrido_hormiga)
 
         else:
-            # print("No me muevo y lo intento de nuevo")
+            print("Si esto sale es que no estoy calculando bien el movimiento de la hormiga")
             pass
         
         # Si la posición de la hormiga coincide con la posición de la comida
@@ -198,8 +176,6 @@ def paseo_hormiga1(win,horm,comi):
                 recorrido_corto=recorrido_hormiga
 
             break
-
-        # Luego compruebo si estoy en la comida para pararlo
         
         # Si llego al final del loop sin haber encontrado nada pongo un mensaje
         if stamina == aguante_hormiga:
@@ -209,6 +185,7 @@ def paseo_hormiga1(win,horm,comi):
             fracasos+= 1
 
             break
+        
         # Compruebo si he entrado en una plaza y levanto muro
         # desactivar para probar sin esta mejora
         comprueba_plaza(win,casilla,pos_horm,dir_objetivo)
@@ -224,6 +201,10 @@ def comprueba_plaza(win,casilla,pos_horm,dir_objetivo):
 
     # Meto la función try para evitar errores con comprobaciones fuera del entorno
     try:
+        # Formato de la lista de datos:
+        #   - Dig 1: Dirección
+        #   - Dig 2-4: Direcciones para definir las celdas delante y a los lados
+        #   - Dig 5-12: Lados a analizar en las casillas anexas para ver si es una plaza
         lista_datos =[(1,1,2,4,2,3,1,4,4,3,1,2),(2,2,3,1,4,3,2,1,4,1,2,3),(3,3,4,2,4,1,3,2,1,2,4,3),(4,4,1,3,1,2,4,3,2,3,1,4)]
         for n in range(4):
             dat = lista_datos[n]
@@ -243,14 +224,33 @@ def comprueba_plaza(win,casilla,pos_horm,dir_objetivo):
                     bordes_plaza_dcha =1
                     bordes_plaza_izda = 1
 
+            # Si detecto plaza, levanto un muro en la casilla de delante a uno de los
+            #  lados, para separar la plaza, pero sin levantar obstáculos
             if bordes_plaza_izda ==0 or bordes_plaza_dcha ==0:
-                # Si detecto plaza, levanto un muro delante (como si hubiese un callejón delante)
+            
+                if bordes_plaza_izda ==0:
+                    # Defino dirección mirar a la izquierda
+                    if dir_objetivo == 4: dir_lado=1
+                    else: dir_lado= dir_objetivo +1
+
+                if bordes_plaza_dcha ==0:
+                    # Defino dirección mirar a la izquierda
+                    if dir_objetivo == 1: dir_lado=4
+                    else: dir_lado= dir_objetivo -1
+
                 print("Plaza detectada!!")
-                print("Celda anexa delante: ", celda_anexa_delante)
-                print("Comi: ", entorno[comi])
-                pos_horm_futura = pos_horm + direcciones[dir_objetivo-1]
-                casilla_futura = entorno[pos_horm_futura]
-                levantar_muro_delante(win, casilla, casilla_futura,dir_objetivo)
+                print("Celda anexa delante: ", celda_anexa_delante, "Dirección plaza: ", dir_lado)
+
+                # Calculo la casilla anexa a un lado
+                pos_horm_delante = pos_horm + direcciones[dir_objetivo-1]
+                pos_horm_delante_lado = pos_horm_delante + direcciones[dir_lado-1]
+                casilla_anexa_delante_lado = entorno[pos_horm_delante_lado]
+
+                levantar_muro(win, celda_anexa_delante, casilla_anexa_delante_lado,dir_lado)
+
+
+
+
     except (IndexError):
     # except (RuntimeError, TypeError, NameError, IndexError):
         # print("Detectado")
@@ -277,7 +277,7 @@ def comprueba_callejon(win, horm, casilla, pos_horm,dir_objetivo):
         # print("Casilla actual: ", casilla)
         # print("Casilla futura: ", casilla_futura)
 
-        levantar_muro_delante(win, casilla, casilla_futura,dir_objetivo)
+        levantar_muro(win, casilla, casilla_futura,dir_objetivo)
 
     # Si no es un callejón
     # cambio la posición de la hormiga
@@ -286,7 +286,7 @@ def comprueba_callejon(win, horm, casilla, pos_horm,dir_objetivo):
         # pos_horm += direcciones[dir_objetivo-1]
     return mueve
 
-def levantar_muro_delante(win, casilla, casilla_futura,dir_objetivo):
+def levantar_muro(win, casilla, casilla_futura,dir_objetivo):
     # Programa para levantar muros en la casilla y en la opuesta
     # Levanto un muro en la casilla
     print("Antes de levantar muro: ",casilla)
@@ -366,7 +366,7 @@ def recuento_de_exitos():
     exitos_porc = exitos*100 // total_intentos
     fracasos_porc = fracasos*100 // total_intentos
     recorrido_corto_num = len(recorrido_corto)
-    track_success = [exitos,fracasos,total_intentos,exitos_porc,"%",fracasos_porc,"%",recorrido_corto_num,recorrido_corto]
+    track_success = ["Exitos:",exitos,"Fracasos:",fracasos,"Total:",total_intentos,"Éxitos %: ",exitos_porc,"%","Fracasos %: ",fracasos_porc,"%","Numero casillas recorrido más corto: ",recorrido_corto_num,recorrido_corto]
 
     print("Resultados: ", track_success)
 
