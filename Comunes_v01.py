@@ -1,25 +1,27 @@
 
-def com_pintar_hormiguero(origenX,origenY,win):
-    
+def com_pintar_hormiguero(bordX,bordY,win,entorno,dispX,dispY,tamX,tamY,tc):
 # Utilizando pygame defino una función para pintar el entorno
 # Esto lo hice complicado porque estaba en turtle e iba muy lento
 # En pygame va rápido por lo que lo puedo simplificar
+
+# Importo lo que me va a hacer falta
+    import pygame
 
 # Primero pinto los bordes
    
     for casilla in range(0, tamY):
         casillaCheck = entorno[casilla]
-        com_pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
+        com_pintar_bordes_casilla(bordX,bordY,casillaCheck,win,dispX,dispY,tc)
 
         casillaCheck = entorno[casilla+tamY*(tamX-1)]
-        com_pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
+        com_pintar_bordes_casilla(bordX,bordY,casillaCheck,win,dispX,dispY,tc)
 
     for casilla in range(0, tamX-1):
         casillaCheck = entorno[tamY+casilla*tamY]
-        com_pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
+        com_pintar_bordes_casilla(bordX,bordY,casillaCheck,win,dispX,dispY,tc)
 
         casillaCheck = entorno[tamY*2-1+casilla*tamY]
-        com_pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
+        com_pintar_bordes_casilla(bordX,bordY,casillaCheck,win,dispX,dispY,tc)
 
 # Luego el interior alternando celdas
 
@@ -33,19 +35,17 @@ def com_pintar_hormiguero(origenX,origenY,win):
             casillaCheck = entorno[tamY+1+columna*tamY+fila*2+tieneQueSerImpar]
             ## print(columna, fila,casillaCheck,tieneQueSerImpar)
 
-            com_pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
+            com_pintar_bordes_casilla(bordX,bordY,casillaCheck,win,dispX,dispY,tc)
 
-def com_pintar_bordes_casilla(origenX,origenY,casillaCheck,win):
+def com_pintar_bordes_casilla(bordX,bordY,casillaCheck,win,dispX,dispY,tc):
     # Programa para pintar los bordes de una casilla determinada
     # Defino el tamaño de las casillas y el origen de cada una
-    # 10 para tamaño pequeño
 
-    tcX = (dispX-40)/tamX
-    tcY = (dispY-40)/tamY
-    tc = min (tcX, tcY)
+# Importo lo que me va a hacer falta
+    import pygame
 
-    posX = casillaCheck[0]*tc+origenX
-    posY = casillaCheck[1]*tc+origenY
+    posX = casillaCheck[0]*tc+bordX
+    posY = casillaCheck[1]*tc+bordY
 
     # Pintar lados Casilla
     
@@ -62,30 +62,23 @@ def com_pintar_bordes_casilla(origenX,origenY,casillaCheck,win):
         pygame.draw.line(win, (0, 0, 0), (posX+tc, posY), (posX, posY), 3)
 
 
-def com_pinto_cuadro (win, color, casilla):
-
+def com_pinto_cuadro (win, color, casilla,entorno, bordX, bordY, tc):
     # Programa para pintar cuadros en el hormiguero
+
+    import pygame
 
     casilla_pintar = entorno[casilla]
     coord_X = casilla_pintar[0]
     coord_Y = casilla_pintar[1]
 
-    # El tamaño del cuadrado lo debería hacer con una variable global o no local.
-
-    tcX = (dispX-40)/tamX
-    tcY = (dispY-40)/tamY
-    tc = min (tcX, tcY)
-
     # Para que los cuadrados no tapen los bordes, les quito un 10% de área.
-
     bordeblanco = tc/10
 
     # Dibujo el cuadrado
-
     pygame.draw.rect(win, color, (coord_X*tc+bordX+bordeblanco,coord_Y*tc+bordY+bordeblanco, tc-bordeblanco*2, tc-bordeblanco*2), 0)
 
 
-def com_hormiguero(win,tamY):
+def com_hormiguero(win,entorno,tamY,bordX,bordY,tc):
     # Programa para situar el hormiguero
 
     global horm
@@ -96,16 +89,16 @@ def com_hormiguero(win,tamY):
     # Fijo el hormiguero en un punto fijo
     horm = 2*tamY+tamY//2
 
-    print ("Hormiguero en: ",horm)
-    print (entorno[horm])
+    # print ("Hormiguero en: ",horm)
+    # print (entorno[horm])
     
     color_hormiguero = (201, 135, 58)
 
-    com_pinto_cuadro(win, color_hormiguero, horm)
+    com_pinto_cuadro(win, color_hormiguero, horm,entorno, bordX, bordY, tc)
 
     return horm
 
-def com_comida(win,tamY):
+def com_comida(win,entorno,tamY,bordX,bordY,tc):
     # Programa para situar la comida
 
     global comi
@@ -113,23 +106,25 @@ def com_comida(win,tamY):
     # Selecciono origen hormiguero aleatorio (tengo que cambiar por el tema de los bordes)
     # comi = random.randint(0,len(entorno)-1)
 
-    # Fijo el hormiguero en un punto fijo
-    comi = len(entorno)-1-(2*tamY+tamY//2)
+    # Fijo la comida en un punto fijo
+    comi = len(entorno)-(2*tamY+tamY//2)
 
     # print ("Comida en: ",comi)
     # print (entorno[comi])
     
     color_comida = (91, 155, 213)
 
-    com_pinto_cuadro(win, color_comida, comi)
+    com_pinto_cuadro(win, color_comida, comi,entorno, bordX, bordY, tc)
 
     return comi
 
+def com_text_on_screen(win,tamX,tamY):
+    # Este es el programa que escribe en la pantalla
 
+    import pygame
 
-def com_text_on_screen(win):
-
-    
+    # Dibujo el fondo
+    win.fill((221,221,221))
 
     # Defino las fuentes
     fontA = pygame.font.SysFont(None, 50)
@@ -150,6 +145,19 @@ def com_text_on_screen(win):
     img3 = fontB.render(text3, True, 0)
     win.blit(img3, (120, 80))
 
+    # Dibujamos botón Exit
+    botonExit = pygame.Surface((100,25))
+    botonExit.fill((255,0,0))
+    win.blit(botonExit,(20,120))
+    textExit = fontB.render("Exit", True, 0)
+    win.blit(textExit, (25, 125))
+
+    # Dibujamos botón Otro Laberinto
+    botonOtro = pygame.Surface((100,25))
+    botonOtro.fill((198,224,180))
+    win.blit(botonOtro,(20,160))
+    textOtro = fontB.render("Otro", True, 0)
+    win.blit(textOtro, (25, 165))
 
 
     # Esto se supone que es para poder poner los datos, pero no funciona.
@@ -178,13 +186,13 @@ def com_text_on_screen(win):
     #         pygame.draw.rect(win, 0, cursor3)
     #     pygame.display.update()
 
+def com_borrar_hormiguero(win,dispX,dispY,bordX,bordY):
+    # Programa para borrar lo que hay pintado
+    
+    import pygame
 
-def com_obtener_entorno_de_fichero():
-    # Función para cargar el entorno de un fichero en vez de generarlo cada vez.
-    #   utilizo la función pickle que es muy eficiente
-    #   utilizo read binary "rb"
-    global entorno
-
-    with open("Datos/DatosEntorno.txt", 'rb') as fp:
-        entorno = pickle.load(fp)
-
+    longX = dispX-bordX
+    longY = dispY-bordY
+    fondoHormiguero = pygame.Surface((longX,longY))
+    fondoHormiguero.fill((221,221,221))
+    win.blit(fondoHormiguero,(bordX,bordY))

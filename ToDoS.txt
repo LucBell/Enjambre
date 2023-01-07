@@ -6,21 +6,18 @@ Cosas que tengo que hacer en este programa
     1f. Que la feromona se pierda con el tiempo.
     1h. Dar preferencia a que no den la vuelta, que siempre intenten ir hacia delante.
     1i. Pintar de un color distinto los muros originales de los levantados.
+    1j. Poner las variables principales en el módulo de comunes y que tanto el solver como 
+        el crea laberintos que las cojan de ahí, para que no estén repetidas.
 
 2. Desarrollar la generación de hormigas.
 
 3. Display.
-    3a. Aprender a poner botones y un menú del juego sin tener que pasar por la consola.
 
 4. Otros
     4a. Guardar la posición de hormiguero y comida.
     4c. Simplificar toda la parte original de dibujo del laberinto.
         Lo hice complicado para ser rápido pero en Phyton no tiene sentido.
     4d. Pensar si desarrollo la apertura de zonas cerradas del laberinto.
-    4e. Separar el programa en dos:
-        4e1. Un programa de generación aleatoria de laberintos que se almacenan en
-            ficheros.
-        4e2. Un programa de resolución de laberintos almacenados en ficheros.
     4f. Fin del programa, elegir el camino más corto de los encontrados.
     4h. Calcular el tiempo de generación de laberinto y de hormigueo.
 
@@ -41,3 +38,15 @@ ToDoS Cerrados:
 4. Otros
     4g. He comenzado a cambiar el hormiguero para dejar una fila de datos por fuera, pero afecta a muchas cosas y no creo haberlo arreglado todo.
         He empezado en la versión 09, pero no sé si seguir por ahí...
+
+07/01/2023
+
+3. Display.
+    3a. Aprender a poner botones y un menú del juego sin tener que pasar por la consola.
+
+4. Otros.
+    4e. Separar el programa en dos:
+        4e1. Un programa de generación aleatoria de laberintos que se almacenan en
+            ficheros.
+        4e2. Un programa de resolución de laberintos almacenados en ficheros.
+        4e3. Un programa con los módulos comunes a ambos.

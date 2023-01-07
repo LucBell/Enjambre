@@ -11,7 +11,8 @@ import pygame
 import time
 import pickle
 
-# from pygame.locals import *
+# Carga los programas comunes
+from Comunes_v01 import *
 
 # Inicializa pygame
 
@@ -43,6 +44,12 @@ bordY = 20
 tamX = 20 # tamaño eje X del laberinto
 tamY = 10  # tamaño eje Y del laberinto
 bordes = 25
+
+# Calculo el tamaño de las casillas para que no se salgan de la pantalla
+tcX = (dispX-(bordX+bordY))/tamX
+tcY = (dispY-(bordY*2))/tamY
+tc = min (tcX, tcY)
+
 
 def genera_el_entorno():
     # Con esta función creamos los bordes aleatorios y los cargamos en la variable entorno
@@ -291,138 +298,6 @@ def unificaBordesConAdyacentesCasilla(bordeLibre, casillaCheck,casilla):
 
 # --------------------------------------------------------------
 
-
-def pintar_hormiguero(origenX,origenY,win):
-    
-# Utilizando pygame defino una función para pintar el entorno
-# Esto lo hice complicado porque estaba en turtle e iba muy lento
-# En pygame va rápido por lo que lo puedo simplificar
-
-# Primero pinto los bordes
-   
-    for casilla in range(0, tamY):
-        casillaCheck = entorno[casilla]
-        pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
-
-        casillaCheck = entorno[casilla+tamY*(tamX-1)]
-        pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
-
-    for casilla in range(0, tamX-1):
-        casillaCheck = entorno[tamY+casilla*tamY]
-        pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
-
-        casillaCheck = entorno[tamY*2-1+casilla*tamY]
-        pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
-
-# Luego el interior alternando celdas
-
-    for columna in range(0, tamX-2):
-        for fila in range(0,tamY//2):
-            if columna%2==0:
-                tieneQueSerImpar =1
-            else:
-                tieneQueSerImpar= 0
-                
-            casillaCheck = entorno[tamY+1+columna*tamY+fila*2+tieneQueSerImpar]
-            ## print(columna, fila,casillaCheck,tieneQueSerImpar)
-
-            pintar_bordes_casilla(origenX,origenY,casillaCheck,win)
-
-def pintar_bordes_casilla(origenX,origenY,casillaCheck,win):
-    # Programa para pintar los bordes de una casilla determinada
-    # Defino el tamaño de las casillas y el origen de cada una
-
-    # Calculo el tamaño de las casillas para que no se salgan de la pantalla
-    tcX = (dispX-(bordX+bordY))/tamX
-    tcY = (dispY-(bordY*2))/tamY
-    tc = min (tcX, tcY)
-    # print("Calculo bordes: tc:",tc,"tcX:",tcX,"tcY:",tcY)
-
-
-    posX = casillaCheck[0]*tc+origenX
-    posY = casillaCheck[1]*tc+origenY
-
-    # Pintar lados Casilla
-    
-    if casillaCheck[2]==1:
-        pygame.draw.line(win, (0, 0, 0), (posX, posY), (posX, posY+tc), 3)
-
-    if casillaCheck[3]==1:
-        pygame.draw.line(win, (0, 0, 0), (posX, posY+tc), (posX+tc, posY+tc), 3)
-
-    if casillaCheck[4]==1:
-        pygame.draw.line(win, (0, 0, 0), (posX+tc, posY+tc), (posX+tc, posY), 3)
-
-    if casillaCheck[5]==1:
-        pygame.draw.line(win, (0, 0, 0), (posX+tc, posY), (posX, posY), 3)
-
-
-def text_on_screen(win):
-    # Este es el programa que escribe en la pantalla
-    
-    # Dibujo el fondo
-    win.fill((221,221,221))
-
-    # Defino las fuentes
-    fontA = pygame.font.SysFont(None, 50)
-    fontB = pygame.font.SysFont(None, 30)
-
-    # Texto Título
-    text1 = fontA.render("Swarm", True, 0)
-    win.blit(text1, (20, 20))
-    
-    # Textos de datos
-    # Título Tamaño
-    text2 = fontB.render("Tamaño: ", True, 0)
-    win.blit(text2, (20, 80))
-
-    # Campo para el tamaño
-    # Texto inicial
-    text3 = str(tamX)+"x"+str(tamY)
-    img3 = fontB.render(text3, True, 0)
-    win.blit(img3, (120, 80))
-
-    # Dibujamos botón Exit
-    botonExit = pygame.Surface((100,25))
-    botonExit.fill((255,0,0))
-    win.blit(botonExit,(20,120))
-    textExit = fontB.render("Exit", True, 0)
-    win.blit(textExit, (25, 125))
-
-    # Dibujamos botón Otro Laberinto
-    botonOtro = pygame.Surface((100,25))
-    botonOtro.fill((198,224,180))
-    win.blit(botonOtro,(20,160))
-    textOtro = fontB.render("Otro", True, 0)
-    win.blit(textOtro, (25, 165))
-
-
-    # Esto se supone que es para poder poner los datos, pero no funciona.
-
-    # Rectángulo para tomar los datos
-    # rect3 = img3.get_rect()
-    # rect3.topleft = (120, 80)
-    # cursor3 = Rect(rect3.topright, (3, rect3.height))
-
-    # running = True
-
-    # while running:
-    #     for event in pygame.event.get():
-    #         if event.type == KEYDOWN:
-    #             if event.key == K_BACKSPACE:
-    #                 if len(text3)>0:
-    #                     text3 = text3[:-1]
-    #             else:
-    #                 text3 += event.unicode
-    #             img3 = fontB.render(text3, True, 0)
-    #             rect3.size=img3.get_size()
-    #             cursor3.topleft = rect3.topright
-    
-    #     win.blit(img3, rect3)
-    #     if time.time() % 1 > 0.5:
-    #         pygame.draw.rect(win, 0, cursor3)
-    #     pygame.display.update()
-
 def guardar_hormiguero():
     # Función para guardar el entorno en un fichero
     # Prueba de almacenamiento como binario de forma global
@@ -452,18 +327,14 @@ def inicio(win):
     global entorno
     entorno = []
 
-    # borro lo que hay pintado
-    longX = dispX-bordX
-    longY = dispY-bordY
-    fondoHormiguero = pygame.Surface((longX,longY))
-    fondoHormiguero.fill((221,221,221))
-    win.blit(fondoHormiguero,(bordX,bordY))
+    # Borro el hormiguero pintando encima
+    com_borrar_hormiguero(win,dispX,dispY,bordX,bordY)
 
     # genero el hormiguero
     genera_entorno_aleatorio()
 
     # Pinto el hormiguero
-    pintar_hormiguero(bordX,bordY,win)
+    com_pintar_hormiguero(bordX,bordY,win,entorno,dispX,dispY,tamX,tamY,tc)
 
     # Esto es necesario para que se vea lo que pinto
     pygame.display.update()
@@ -472,8 +343,6 @@ def inicio(win):
 def main():
     # Este es el programa principal de Ejecución
     # Tiene algunos trozos de programa, que se podrían delegar fuera, para dejar solo lo principal
-
-    
     
     # Establecer el tamaño de la ventana y lo mete en una variable
     win = pygame.display.set_mode((dispX,dispY))
@@ -481,27 +350,13 @@ def main():
     # Establecer el título de la ventana
     pygame.display.set_caption("Swarm AI")
 
-    # La pinta de color gris el fondo
-    # win.fill((221,221,221))
-
     # Ejecución de programa
     # Quitar las señales a las partes que quiero ejecutar
 
-    text_on_screen(win)
+    # Pongo los textos
+    com_text_on_screen(win,tamX,tamY)
 
-    # Desactivo la carga para que siempre se cargue de fichero
-    # Activar siguiente línea y desactivar la siguiente para que vuelva a preguntar
-    # si queremos generar uno nuevo.
-    # carga_entorno() # Este si quiero que me pregunte
-    # obtener_entorno_de_fichero() # Este si quiero que lo tome de fichero
-    # genera_entorno_aleatorio() # Este si quiero que lo genere aleatorio
-
-    # Pinto el hormiguero
-    # pintar_hormiguero(bordX,bordY,win)
-
-    # Esto es necesario para que se vea lo que pinto
-    # pygame.display.update()
-
+    # Programa principal
     inicio(win)
 
     # Ejemplo de como mantener un programa corriendo hasta que cambias una variable.
