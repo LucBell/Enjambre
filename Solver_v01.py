@@ -40,9 +40,9 @@ feromona_inicial = 10
 
 # Saco a pasear un número "n" de hormigas
 aguante_hormiga = (tamX+tamY)*6
-# aguante_hormiga = 1
+# aguante_hormiga = 10
 numero_de_hormigas = tamX*tamY*10
-# numero_de_hormigas = 1
+# numero_de_hormigas = 20
 pausa_hormigas = 3
 
 # Almaceno en una lista cómo varía el indicador de posición según
@@ -137,8 +137,7 @@ def paseo_hormiga1(win,horm,comi):
                 pass
 
             casilla = entorno[pos_horm]
-            #print ("Me muevo a: ", pos_horm, casilla)
-            #print ("He recorrido: ", recorrido_hormiga)
+            # print ("Me muevo a: ", pos_horm, casilla)
             
             # Aquí voy a añadir la casilla al recorrido
             # o si he hecho un bucle, lo voy a borrar
@@ -162,8 +161,8 @@ def paseo_hormiga1(win,horm,comi):
         # La hormiga vuelve al hormiguero depositando la feromona.
         if pos_horm== comi:
             print("Encontré la comida!! En el intento: ", stamina)
-            print("He necesitado los siguientes pasos: ", len(recorrido_hormiga))
-            print("He recorrido: ",recorrido_hormiga)
+            # print("He necesitado los siguientes pasos: ", len(recorrido_hormiga))
+            # print("He recorrido: ",recorrido_hormiga)
 
             dejar_feromona(recorrido_hormiga)
             pintar_camino(win, recorrido_hormiga)
@@ -238,8 +237,8 @@ def comprueba_plaza(win,casilla,pos_horm,dir_objetivo):
                     if dir_objetivo == 1: dir_lado=4
                     else: dir_lado= dir_objetivo -1
 
-                print("Plaza detectada!!")
-                print("Celda anexa delante: ", celda_anexa_delante, "Dirección plaza: ", dir_lado)
+                # print("Plaza detectada!!")
+                # print("Celda anexa delante: ", celda_anexa_delante, "Dirección plaza: ", dir_lado)
 
                 # Calculo la casilla anexa a un lado
                 pos_horm_delante = pos_horm + direcciones[dir_objetivo-1]
@@ -273,7 +272,7 @@ def comprueba_callejon(win, horm, casilla, pos_horm,dir_objetivo):
     if barreras_casilla_futura==3 and pos_horm_futura!=horm:
         
         mueve = False
-        print("Callejón!")
+        # print("Callejón!")
         # print("Casilla actual: ", casilla)
         # print("Casilla futura: ", casilla_futura)
 
@@ -289,12 +288,12 @@ def comprueba_callejon(win, horm, casilla, pos_horm,dir_objetivo):
 def levantar_muro(win, casilla, casilla_futura,dir_objetivo):
     # Programa para levantar muros en la casilla y en la opuesta
     # Levanto un muro en la casilla
-    print("Antes de levantar muro: ",casilla)
+    # print("Antes de levantar muro: ",casilla)
     casilla[dir_objetivo+1] = 1
-    print("Después de levantar muro: ",casilla)
+    # print("Después de levantar muro: ",casilla)
 
     # Pinto el muro nuevo en la casilla
-    com_pintar_bordes_casilla(bordX,bordY,casilla,win,dispX,dispY,tc)
+    com_pintar_un_borde(bordX,bordY,casilla,win,dispX,dispY,tc,color_amarillo,dir_objetivo)
     
     # Calculo la dirección opuesta
     if dir_objetivo > 2:
@@ -304,7 +303,7 @@ def levantar_muro(win, casilla, casilla_futura,dir_objetivo):
     
     #Levanto un muro en la casilla opuesta
     casilla_futura[dir_opuesta+1] = 1
-    print("Casilla Opuesta modificada: ", casilla_futura)
+    # print("Casilla Opuesta modificada: ", casilla_futura)
 
 
 def dejar_feromona(recorrido_hormiga):
@@ -374,9 +373,13 @@ def inicio(win):
     # Programa que limpia la pantalla, carga de nuevo el entorno
     # y lanza las hormigas a buscar la comida
 
-    global entorno
+    # Vacío las variables principales
+    global entorno, feromona, exitos, fracasos, recorrido_corto
     entorno = []
     feromona = []
+    exitos = 0
+    fracasos = 0
+    recorrido_corto = []
 
     # Borro el hormiguero pintando encima
     com_borrar_hormiguero(win,dispX,dispY,bordX,bordY)

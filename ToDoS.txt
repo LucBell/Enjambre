@@ -5,7 +5,6 @@ Cosas que tengo que hacer en este programa
     1c. Que gestionen rotondas de 6 casillas.
     1f. Que la feromona se pierda con el tiempo.
     1h. Dar preferencia a que no den la vuelta, que siempre intenten ir hacia delante.
-    1i. Pintar de un color distinto los muros originales de los levantados.
     1j. Poner las variables principales en el módulo de comunes y que tanto el solver como 
         el crea laberintos que las cojan de ahí, para que no estén repetidas.
     1k. Medir los pasos de las hormigas para poder saber la eficiencia de su
@@ -53,3 +52,13 @@ ToDoS Cerrados:
             ficheros.
         4e2. Un programa de resolución de laberintos almacenados en ficheros.
         4e3. Un programa con los módulos comunes a ambos.
+
+08/01/2023
+
+4. Otros
+    4i. Mejorar el muro para separar plazas mejor delante a un lado que delante, porque
+        era común que levantase un muro en el camino óptimo. Ahora es muy improbable que lo
+        haga.
+
+1. Terminar de desarrollar las hormigas.
+    1i. Pintar de un color distinto los muros originales de los levantados.
