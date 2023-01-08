@@ -22,6 +22,10 @@ Cosas que tengo que hacer en este programa
     4d. Pensar si desarrollo la apertura de zonas cerradas del laberinto.
     4f. Fin del programa, elegir el camino más corto de los encontrados.
     4h. Calcular el tiempo de generación de laberinto y de hormigueo.
+    4j. Poder poner el tamaño del laberinto en un par de variables en pantalla.
+    4i. Mezclar en un mismo display la generación de laberintos y la resolución del mismo.
+        Haría falta botón de crear o cargar laberinto, y botón de resolver.
+        Comienza por: tamaño, crear, cargar, resolver.
 
 ToDoS Cerrados:
 
