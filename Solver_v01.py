@@ -1,8 +1,7 @@
-# Creación del entorno
 
 # Carga Librerías
-
 import os
+
 # Lugar donde aparece la ventana
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (0,0)
 
@@ -15,7 +14,6 @@ import pickle
 from Comunes_v01 import *
 
 # Inicializa pygame
-
 pygame.font.init()
 
 # Declaraciones variables principales
@@ -35,6 +33,13 @@ recorrido_corto_num = 0
 recorrido_corto = []
 track_success = [exitos,fracasos,total_intentos,exitos_porc,fracasos_porc,recorrido_corto_num,recorrido_corto]
 
+# Variables cálculo eficiencia
+numero_pasos_total = 0
+numero_pasos_diferentes = 0
+eficiencia_hormiga = 0
+eficiciencias_hormigas = []
+eficiencia_proceso_total = 0
+
 # Fijo el Tamaño para test de las variables principales
 feromona_inicial = 10
 
@@ -42,7 +47,7 @@ feromona_inicial = 10
 aguante_hormiga = (tamX+tamY)*6
 # aguante_hormiga = 10
 numero_de_hormigas = tamX*tamY*10
-# numero_de_hormigas = 20
+# numero_de_hormigas = 1
 pausa_hormigas = 3
 
 # Almaceno en una lista cómo varía el indicador de posición según
@@ -68,8 +73,13 @@ def paseo_hormiga1(win,horm,comi):
     global entorno
     global exitos, fracasos, recorrido_corto, aguante_hormiga
 
-    # defino variable con el histórico del paseo
+    # defino variable con el histórico del paseo que cortaré
+    #   para que solo tenga la parte limpia
     recorrido_hormiga = []
+
+    # y otra variable con el recorrido total para ver cómo
+    #   de eficiente es el proceso
+    recorrido_hormiga_total = []
 
     # Coloco la hormiga en el hormiguero
     pos_horm = (horm)
@@ -99,22 +109,26 @@ def paseo_hormiga1(win,horm,comi):
         else: muro_3 = 0
         if casilla[4+1] == 0: muro_4 = 1
         else: muro_4 = 0
+        
         # Aquí calculo la probabilidad de cada dirección.
         #   como multiplico la feromona por el muro. Si hay muro la probabilidad es 0
         prob_de_1 = feromona[pos_horm+direcciones[1-1]]*muro_1
         prob_de_2 = feromona[pos_horm+direcciones[2-1]]*muro_2
         prob_de_3 = feromona[pos_horm+direcciones[3-1]]*muro_3
         prob_de_4 = feromona[pos_horm+direcciones[4-1]]*muro_4
+
         # Calculo el número total de probabilidad y calculo un número en el rango
         prob_total = prob_de_1+prob_de_2+prob_de_3+prob_de_4
-        dir_random = random.randint(0, prob_total)
+        dir_random = random.randint(1, prob_total)
+
         # Calculo los rangos para ver a quién le ha tocado
         prob_acu_2 = prob_de_1+prob_de_2
         prob_acu_3 = prob_acu_2+prob_de_3
+
         # pregunto a ver en qué intervalo ha caído
-        if dir_random < prob_de_1: dir_objetivo = 1
-        elif dir_random < prob_acu_2: dir_objetivo = 2
-        elif dir_random < prob_acu_3: dir_objetivo = 3
+        if dir_random <= prob_de_1: dir_objetivo = 1
+        elif dir_random <= prob_acu_2: dir_objetivo = 2
+        elif dir_random <= prob_acu_3: dir_objetivo = 3
         else: dir_objetivo = 4
 
         # print("Casilla: ",casilla," Probabilidades: ",prob_de_1,prob_acu_2,prob_acu_3,prob_total)
@@ -150,16 +164,25 @@ def paseo_hormiga1(win,horm,comi):
             else:
                 recorrido_hormiga.append(pos_horm)
             
+            # Añado la casilla al recorrido total
+            recorrido_hormiga_total.append(pos_horm)
+
             # print ("He recorrido: ", recorrido_hormiga)
 
         else:
+            # Pongo esto para detectar errores en el cálculo de la dirección, suelen ocurrir con los
+            #   "bordes" de las probabilidades
             print("Si esto sale es que no estoy calculando bien el movimiento de la hormiga")
+            print("Probabilidades 1-4: ", prob_de_1, prob_de_2, prob_de_3, prob_de_4)
+            print("Número aleatorio: ", dir_random)
+            print("Casilla actual: ", casilla)
+            print("Dirección objetivo: ", dir_objetivo)
             pass
         
         # Si la posición de la hormiga coincide con la posición de la comida
         #   considero que ha encontrado la comida.
         # La hormiga vuelve al hormiguero depositando la feromona.
-        if pos_horm== comi:
+        if pos_horm == comi:
             print("Encontré la comida!! En el intento: ", stamina)
             # print("He necesitado los siguientes pasos: ", len(recorrido_hormiga))
             # print("He recorrido: ",recorrido_hormiga)
@@ -174,6 +197,9 @@ def paseo_hormiga1(win,horm,comi):
             if len(recorrido_corto) == 0 or len(recorrido_hormiga)<len(recorrido_corto):
                 recorrido_corto=recorrido_hormiga
 
+            # Calculo eficiencia
+            calculo_eficiencia_hormiga(recorrido_hormiga_total)
+
             break
         
         # Si llego al final del loop sin haber encontrado nada pongo un mensaje
@@ -183,11 +209,25 @@ def paseo_hormiga1(win,horm,comi):
             # Actualizo el intento como fracaso
             fracasos+= 1
 
+            # Calculo eficiencia
+            calculo_eficiencia_hormiga(recorrido_hormiga_total)
+
             break
         
         # Compruebo si he entrado en una plaza y levanto muro
         # desactivar para probar sin esta mejora
         comprueba_plaza(win,casilla,pos_horm,dir_objetivo)
+
+def calculo_eficiencia_hormiga(recorrido_hormiga_total):
+    # Calculo la eficiencia del recorrido
+    # Pasos totales
+    numero_pasos_total = len(recorrido_hormiga_total)
+    # Pasos diferentes
+    numero_pasos_diferentes = len(set(recorrido_hormiga_total))
+    # Cálculo eficiencia
+    eficiencia_hormiga = numero_pasos_diferentes / numero_pasos_total
+    # Meto todas las eficiencias en una lista
+    eficiciencias_hormigas.append(eficiencia_hormiga)
 
 
 def comprueba_plaza(win,casilla,pos_horm,dir_objetivo):
@@ -368,6 +408,11 @@ def recuento_de_exitos():
     track_success = ["Exitos:",exitos,"Fracasos:",fracasos,"Total:",total_intentos,"Éxitos %: ",exitos_porc,"%","Fracasos %: ",fracasos_porc,"%","Numero casillas recorrido más corto: ",recorrido_corto_num,recorrido_corto]
 
     print("Resultados: ", track_success)
+
+    # Calculo eficiencia y lo muestro
+    eficiencia_proceso_total = sum(eficiciencias_hormigas)/len(eficiciencias_hormigas)
+    print("Eficiencia total: ", round(eficiencia_proceso_total,2))
+
 
 def inicio(win):
     # Programa que limpia la pantalla, carga de nuevo el entorno
