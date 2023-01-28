@@ -48,7 +48,7 @@ eficiencia_proceso_total = 0
 feromona_inicial = 10
 
 # Saco a pasear un número "n" de hormigas
-aguante_hormiga = (tamX+tamY)*6
+aguante_hormiga = (tamX+tamY)*10
 # aguante_hormiga = 10
 numero_de_hormigas = tamX*tamY*1
 # numero_de_hormigas = 1
@@ -481,6 +481,28 @@ def recuento_de_exitos():
     elapsed_time = end_time - start_time
     print("Tiempo de ejecución: ", round(elapsed_time,2), "segundos")
 
+def pinto_evolucion(win, n, numero_de_hormigas):
+    # Pinto Evolución en %
+    # Borro lo anterior
+    fondo_status = pygame.Surface((60,30))
+    fondo_status.fill((221,221,221))
+    win.blit(fondo_status,(120,200))
+    
+    # Calculo el ratio
+    status = round(n/numero_de_hormigas*100)
+    print("Status: ", status, "%")
+    # Defino el tipo de texto
+    fontB = pygame.font.SysFont(None, 30)
+    # Título
+    text_Status = fontB.render("Status: ", True, 0)
+    win.blit(text_Status, (20, 200))
+    # Texto
+    text_Evol = str(status)+"%"
+    img_Evol = fontB.render(text_Evol, True, 0)
+    win.blit(img_Evol, (120, 200))
+
+    
+
 def inicio(win):
     # Programa que limpia la pantalla, carga de nuevo el entorno
     # y lanza las hormigas a buscar la comida
@@ -524,6 +546,10 @@ def inicio(win):
     for n in range(1,numero_de_hormigas+1):
         # print("Sale la hormiga: ",n," .............suerte!")
         paseo_hormiga1(win,horm,comi)
+
+        # Pinto evolución en pantalla        
+        pinto_evolucion(win, n, numero_de_hormigas)
+
         pygame.display.update()
     
     # print("Feromona final: ",feromona)
