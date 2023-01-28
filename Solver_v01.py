@@ -404,6 +404,21 @@ def dejar_feromona(recorrido_hormiga):
         feromona[casilla_camino]+=cantidad_feromona
     
 
+def pintar_final(win, recorrido_hormiga):
+    # Pintar de un color el camino más corto final.
+
+    # Utilizo la función range para omitir el primer y último paso, para no pintar
+    #   encima del hormiguero o la comida.
+
+        global horm, comi
+
+        color_camino = (0, 102, 0)
+
+        for celda_a_pintar in range (0,len(recorrido_hormiga)):
+            if celda_a_pintar == horm or celda_a_pintar==comi:
+                pass
+            com_pinto_cuadro(win, color_camino, recorrido_hormiga[celda_a_pintar],entorno, bordX, bordY, tc)
+
 def pintar_camino(win, recorrido_hormiga):
     # Con esta función quiero pintar el recorrido que ha seguido la hormiga.
 
@@ -515,6 +530,9 @@ def inicio(win):
 
     # Programa que me dice cómo lo estoy haciendo para comparar estrategias
     recuento_de_exitos()
+
+    # Pinto el recorrido corto
+    pintar_final(win, recorrido_corto)
 
     # Esto es necesario para que se vea lo que pinto
     pygame.display.update()
