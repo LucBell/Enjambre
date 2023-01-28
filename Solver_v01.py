@@ -24,6 +24,7 @@ start_time = time.time()
 # Variable Entorno y feromona son listas
 entorno = []
 feromona = []
+pos_horm_anterior = 0
 
 # Defino las variables para medir el éxito de la estrategia
 # Track_sucess es una lista con formato: Éxitos, fracasos, total, % éxitos, % fracasos, número de pasos recorrido más corto, recorrido más corto
@@ -49,7 +50,7 @@ feromona_inicial = 10
 # Saco a pasear un número "n" de hormigas
 aguante_hormiga = (tamX+tamY)*6
 # aguante_hormiga = 10
-numero_de_hormigas = tamX*tamY*10
+numero_de_hormigas = tamX*tamY*1
 # numero_de_hormigas = 1
 pausa_hormigas = 1
 
@@ -74,7 +75,7 @@ def paseo_hormiga1(win,horm,comi):
 
     # Carga variables globales
     global entorno
-    global exitos, fracasos, recorrido_corto, aguante_hormiga
+    global exitos, fracasos, recorrido_corto, aguante_hormiga, pos_horm_anterior
 
     # defino variable con el histórico del paseo que cortaré
     #   para que solo tenga la parte limpia
@@ -113,20 +114,62 @@ def paseo_hormiga1(win,horm,comi):
         if casilla[4+1] == 0: muro_4 = 1
         else: muro_4 = 0
         
+        # Ahora reviso si ya he estado en las celdas contiguas
+        # Primero almaceno los datos de las casillas adyacentes
+        casN1 = pos_horm+direcciones[1-1]
+        casN2 = pos_horm+direcciones[2-1]
+        casN3 = pos_horm+direcciones[3-1]
+        casN4 = pos_horm+direcciones[4-1]
+        # print("Casillas adyacentes: ", casN1,casN2,casN3,casN4)
+        # Ahora reviso si ya he pasado por las adyacentes 
+        checkN1 = recorrido_hormiga_total.count(casN1)
+        checkN2 = recorrido_hormiga_total.count(casN2)
+        checkN3 = recorrido_hormiga_total.count(casN3)
+        checkN4 = recorrido_hormiga_total.count(casN4)
+        # Y utilizo la información para poner una probabilidad
+        # Defino las probabilidades para poder cambiarlas fácilmente
+        prob_casilla_pisada = round(3/10,1)
+        prob_casilla_sin_pisar = 1
+        prob_de_no_volver = round(2/10,1)
+        # Defino primero como si estuviesen todas sin pisar
+        probN1 = prob_casilla_sin_pisar
+        probN2 = prob_casilla_sin_pisar
+        probN3 = prob_casilla_sin_pisar
+        probN4 = prob_casilla_sin_pisar
+        # A las pisadas le cambio la probabilidad
+        if checkN1 > 0: probN1 = prob_casilla_pisada
+        if checkN2 > 0: probN2 = prob_casilla_pisada
+        if checkN3 > 0: probN3 = prob_casilla_pisada
+        if checkN4 > 0: probN4 = prob_casilla_pisada
+        # print("Probabilidades: ", probN1,probN2,probN3,probN4)
+
+        # Ahora voy a castigar la celda anterior para que siempre intente moverse
+        if casN1 == pos_horm_anterior: probN1 = probN1 * prob_de_no_volver
+        if casN2 == pos_horm_anterior: probN2 = probN2 * prob_de_no_volver
+        if casN3 == pos_horm_anterior: probN3 = probN3 * prob_de_no_volver
+        if casN4 == pos_horm_anterior: probN4 = probN4 * prob_de_no_volver
+
         # Aquí calculo la probabilidad de cada dirección.
         #   como multiplico la feromona por el muro. Si hay muro la probabilidad es 0
-        prob_de_1 = feromona[pos_horm+direcciones[1-1]]*muro_1
-        prob_de_2 = feromona[pos_horm+direcciones[2-1]]*muro_2
-        prob_de_3 = feromona[pos_horm+direcciones[3-1]]*muro_3
-        prob_de_4 = feromona[pos_horm+direcciones[4-1]]*muro_4
+        prob_de_1 = feromona[pos_horm+direcciones[1-1]]*muro_1*probN1
+        prob_de_2 = feromona[pos_horm+direcciones[2-1]]*muro_2*probN2
+        prob_de_3 = feromona[pos_horm+direcciones[3-1]]*muro_3*probN3
+        prob_de_4 = feromona[pos_horm+direcciones[4-1]]*muro_4*probN4
+
+        # Los redondeo para evitar el problema de los decimales
+        prob_de_1 = round(prob_de_1,1)
+        prob_de_2 = round(prob_de_2,1)
+        prob_de_3 = round(prob_de_3,1)
+        prob_de_4 = round(prob_de_4,1)
 
         # Calculo el número total de probabilidad y calculo un número en el rango
+        #   tengo líos de decimales, por eso calculo el rango de una forma rara.
         prob_total = prob_de_1+prob_de_2+prob_de_3+prob_de_4
-        dir_random = random.randint(1, prob_total)
+        dir_random = random.randint(1, round(prob_total*10,0))/10
 
         # Calculo los rangos para ver a quién le ha tocado
-        prob_acu_2 = prob_de_1+prob_de_2
-        prob_acu_3 = prob_acu_2+prob_de_3
+        prob_acu_2 = round(prob_de_1+prob_de_2,1)
+        prob_acu_3 = round(prob_acu_2+prob_de_3,1)
 
         # pregunto a ver en qué intervalo ha caído
         if dir_random <= prob_de_1: dir_objetivo = 1
@@ -149,6 +192,7 @@ def paseo_hormiga1(win,horm,comi):
 
             # Muevo si no ha habido problemas
             if mueve == True:
+                pos_horm_anterior = pos_horm
                 pos_horm += direcciones[dir_objetivo-1]
             else:
                 pass
@@ -177,6 +221,7 @@ def paseo_hormiga1(win,horm,comi):
             #   "bordes" de las probabilidades
             print("Si esto sale es que no estoy calculando bien el movimiento de la hormiga")
             print("Probabilidades 1-4: ", prob_de_1, prob_de_2, prob_de_3, prob_de_4)
+            print("Probabilidades Acu: ", prob_de_1, prob_acu_2, prob_acu_3)
             print("Número aleatorio: ", dir_random)
             print("Casilla actual: ", casilla)
             print("Dirección objetivo: ", dir_objetivo)
