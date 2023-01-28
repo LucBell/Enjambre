@@ -18,6 +18,9 @@ pygame.font.init()
 
 # Declaraciones variables principales
 
+# Inicio tiempo
+start_time = time.time()
+
 # Variable Entorno y feromona son listas
 entorno = []
 feromona = []
@@ -48,7 +51,7 @@ aguante_hormiga = (tamX+tamY)*6
 # aguante_hormiga = 10
 numero_de_hormigas = tamX*tamY*10
 # numero_de_hormigas = 1
-pausa_hormigas = 3
+pausa_hormigas = 1
 
 # Almaceno en una lista cómo varía el indicador de posición según
 # en qué dirección se mueva la hormiga
@@ -183,7 +186,7 @@ def paseo_hormiga1(win,horm,comi):
         #   considero que ha encontrado la comida.
         # La hormiga vuelve al hormiguero depositando la feromona.
         if pos_horm == comi:
-            print("Encontré la comida!! En el intento: ", stamina)
+            # print("Encontré la comida!! En el intento: ", stamina)
             # print("He necesitado los siguientes pasos: ", len(recorrido_hormiga))
             # print("He recorrido: ",recorrido_hormiga)
 
@@ -411,20 +414,26 @@ def recuento_de_exitos():
 
     # Calculo eficiencia y lo muestro
     eficiencia_proceso_total = sum(eficiciencias_hormigas)/len(eficiciencias_hormigas)
-    print("Eficiencia total: ", round(eficiencia_proceso_total,2))
+    print("Eficiencia total: ", round(eficiencia_proceso_total,2), "  ", round(sum(eficiciencias_hormigas),1), "/", len(eficiciencias_hormigas))
 
+    # Tiempo final
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    print("Tiempo de ejecución: ", round(elapsed_time,2), "segundos")
 
 def inicio(win):
     # Programa que limpia la pantalla, carga de nuevo el entorno
     # y lanza las hormigas a buscar la comida
 
     # Vacío las variables principales
-    global entorno, feromona, exitos, fracasos, recorrido_corto
+    global entorno, feromona, exitos, fracasos, recorrido_corto, start_time, eficiciencias_hormigas
     entorno = []
     feromona = []
     exitos = 0
     fracasos = 0
     recorrido_corto = []
+    start_time = time.time()
+    eficiciencias_hormigas = []
 
     # Borro el hormiguero pintando encima
     com_borrar_hormiguero(win,dispX,dispY,bordX,bordY)
