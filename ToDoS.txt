@@ -4,6 +4,8 @@ Cosas que tengo que hacer en este programa
 1. Terminar de desarrollar las hormigas.
     1c. Que gestionen rotondas de 6 casillas.
     1f. Que la feromona se pierda con el tiempo.
+    1l. Quitar muros al dejar la feromona que sean amarillos
+        y que se de la vuelta a los mismos.
 
 2. Desarrollar la generación de hormigas.
 

@@ -41,7 +41,7 @@ track_success = [exitos,fracasos,total_intentos,exitos_porc,fracasos_porc,recorr
 numero_pasos_total = 0
 numero_pasos_diferentes = 0
 eficiencia_hormiga = 0
-eficiciencias_hormigas = []
+eficiencias_hormigas = []
 eficiencia_proceso_total = 0
 
 # Fijo el Tamaño para test de las variables principales
@@ -53,6 +53,8 @@ aguante_hormiga = round((tamX*tamY)/4)
 numero_de_hormigas = tamX*tamY*1
 # numero_de_hormigas = 1
 pausa_hormigas = 1
+# número de veces que ejecuto el hormiguero, para comparar entre distintas ejecuciones
+repeticiones = 2
 
 # Almaceno en una lista cómo varía el indicador de posición según
 # en qué dirección se mueva la hormiga
@@ -275,7 +277,7 @@ def calculo_eficiencia_hormiga(recorrido_hormiga_total):
     # Cálculo eficiencia
     eficiencia_hormiga = numero_pasos_diferentes / numero_pasos_total
     # Meto todas las eficiencias en una lista
-    eficiciencias_hormigas.append(eficiencia_hormiga)
+    eficiencias_hormigas.append(eficiencia_hormiga)
 
 
 def comprueba_plaza(win,casilla,pos_horm,dir_objetivo):
@@ -469,18 +471,19 @@ def recuento_de_exitos():
     exitos_porc = exitos*100 // total_intentos
     fracasos_porc = fracasos*100 // total_intentos
     recorrido_corto_num = len(recorrido_corto)
-    track_success = ["Exitos:",exitos,"Fracasos:",fracasos,"Total:",total_intentos,"Éxitos %: ",exitos_porc,"%","Fracasos %: ",fracasos_porc,"%","Numero casillas recorrido más corto: ",recorrido_corto_num,recorrido_corto]
-
-    print("Resultados: ", track_success)
+    # track_success = ["Exitos:",exitos,"Fracasos:",fracasos,"Total:",total_intentos,"Éxitos %: ",exitos_porc,"%","Fracasos %: ",fracasos_porc,"%","Numero casillas recorrido más corto: ",recorrido_corto_num,recorrido_corto]
+    track_success = ["Exitos:",exitos,"Total:",total_intentos,"Éxitos %: ",exitos_porc,"%","Más corto: ",recorrido_corto_num]
+    # print("Resultados: ", track_success)
 
     # Calculo eficiencia y lo muestro
-    eficiencia_proceso_total = sum(eficiciencias_hormigas)/len(eficiciencias_hormigas)
-    print("Eficiencia total: ", round(eficiencia_proceso_total,2), "  ", round(sum(eficiciencias_hormigas),1), "/", len(eficiciencias_hormigas))
+    eficiencia_proceso_total = sum(eficiencias_hormigas)/len(eficiencias_hormigas)
+    #print("Eficiencia total: ", round(eficiencia_proceso_total,2), "  ", round(sum(eficiciencias_hormigas),1), "/", len(eficiciencias_hormigas))
 
     # Tiempo final
     end_time = time.time()
     elapsed_time = end_time - start_time
-    print("Tiempo de ejecución: ", round(elapsed_time,2), "segundos")
+    
+    print("Éxitos:",exitos,"Total:",total_intentos,"Éxitos:",exitos_porc,"%","Más corto:",recorrido_corto_num,"Eficiencia:", round(eficiencia_proceso_total*100),"% Pasos dist/tot","Tiempo:", round(elapsed_time), "segs")
 
 def pinto_evolucion(win, n, numero_de_hormigas):
     # Pinto Evolución en %
@@ -540,9 +543,9 @@ def inicio(win):
     pygame.display.update()
 
     # Paro el programa para ver el laberito antes de que se modifique
-    print("Paramos un momento...")
+    # print("Paramos un momento...")
     time.sleep(pausa_hormigas)
-    print("Salen las hormigas!")
+    # print("Salen las hormigas!")
 
     for n in range(1,numero_de_hormigas+1):
         # print("Sale la hormiga: ",n," .............suerte!")
@@ -578,8 +581,11 @@ def main():
     # Quitar las señales a las partes que quiero ejecutar
 
     com_text_on_screen(win,tamX,tamY)
-
-    inicio(win)
+    
+    print("Salen las hormigas!")
+    
+    for rep in range (0,repeticiones):
+        inicio(win)
 
     # Ejemplo de como mantener un programa corriendo hasta que cambias una variable.
     # Paso 1. Defines la variable
