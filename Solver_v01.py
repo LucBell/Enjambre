@@ -48,7 +48,7 @@ eficiencia_proceso_total = 0
 feromona_inicial = 10
 
 # Saco a pasear un número "n" de hormigas
-aguante_hormiga = (tamX+tamY)*10
+aguante_hormiga = round((tamX*tamY)/4)
 # aguante_hormiga = 10
 numero_de_hormigas = tamX*tamY*1
 # numero_de_hormigas = 1
@@ -186,7 +186,7 @@ def paseo_hormiga1(win,horm,comi):
         if casilla[dir_objetivo+1] == 0:
 
             # Compruebo si es un callejón y tomo medidas
-            mueve = comprueba_callejon(win, horm, casilla, pos_horm, dir_objetivo)
+            mueve = comprueba_callejon(win, horm, comi, casilla, pos_horm, dir_objetivo)
             # Pongo este cuando quiero probar sin localizador de callejones
             # mueve = True
 
@@ -344,7 +344,7 @@ def comprueba_plaza(win,casilla,pos_horm,dir_objetivo):
         pass
 
 
-def comprueba_callejon(win, horm, casilla, pos_horm,dir_objetivo):
+def comprueba_callejon(win, horm, comi, casilla, pos_horm,dir_objetivo):
     # Programa para comprobar si la hormiga se ha metido en un callejón
     # Devuelve clave de movimiento o no
     # Levanta muro para cerrar el callejón para el futuro
@@ -357,7 +357,7 @@ def comprueba_callejon(win, horm, casilla, pos_horm,dir_objetivo):
     casilla_futura = entorno[pos_horm_futura]
     barreras_casilla_futura = casilla_futura[2]+casilla_futura[3]+casilla_futura[4]+casilla_futura[5]
     
-    if barreras_casilla_futura==3 and pos_horm_futura!=horm:
+    if barreras_casilla_futura==3 and pos_horm_futura!=horm and pos_horm_futura!=comi:
         
         mueve = False
         # print("Callejón!")
@@ -410,13 +410,14 @@ def pintar_final(win, recorrido_hormiga):
     # Utilizo la función range para omitir el primer y último paso, para no pintar
     #   encima del hormiguero o la comida.
 
-        global horm, comi
+    global horm, comi
 
-        color_camino = (0, 102, 0)
+    color_camino = (0, 102, 0)
 
-        for celda_a_pintar in range (0,len(recorrido_hormiga)):
-            if celda_a_pintar == horm or celda_a_pintar==comi:
-                pass
+    for celda_a_pintar in range (1,len(recorrido_hormiga)-1):
+        if celda_a_pintar == horm or celda_a_pintar==comi:
+            pass
+        else:
             com_pinto_cuadro(win, color_camino, recorrido_hormiga[celda_a_pintar],entorno, bordX, bordY, tc)
 
 def pintar_camino(win, recorrido_hormiga):
@@ -490,7 +491,7 @@ def pinto_evolucion(win, n, numero_de_hormigas):
     
     # Calculo el ratio
     status = round(n/numero_de_hormigas*100)
-    print("Status: ", status, "%")
+    # print("Status: ", status, "%")
     # Defino el tipo de texto
     fontB = pygame.font.SysFont(None, 30)
     # Título

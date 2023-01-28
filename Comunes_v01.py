@@ -12,8 +12,8 @@ bordX = 200
 bordY = 20
 
 # Fijo el Tamaño para test de las variables principales
-tamX = 40
-tamY = 20
+tamX = 80
+tamY = 40
 bordes = 25
 
 # Calculo el tamaño de las casillas para que no se salgan de la pantalla
